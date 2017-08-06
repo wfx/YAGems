@@ -633,6 +633,8 @@ public class StateGame extends State {
     public void render() {
         SpriteBatch batch = _parent.getSpriteBatch();
 
+        batch.totalRenderCalls = 0;
+
         // STATE LOADING - Just render loading
         if (_state == State.Loading) {
             _loading.draw();
@@ -832,6 +834,9 @@ public class StateGame extends State {
         for (int i = 0; i < numParticles; ++i) {
             _effects.get(i).draw(batch);
         }
+
+        int calls = batch.totalRenderCalls;
+        System.out.print("### " + Integer.toString(calls) + " ###");
     }
 
     @Override
