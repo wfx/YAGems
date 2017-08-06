@@ -1,6 +1,8 @@
 # Esthetique-Gems
 Match 3 Game
 
+![Screenshot](https://raw.githubusercontent.com/wfx/Esthetique-Gems/master/android/assets/screenshot.png)
+
 Esthetique Gems<br>
 is a clone of Freegemas [1]<br>
 what is a remake of Freegemas-xdg [2]<br>
