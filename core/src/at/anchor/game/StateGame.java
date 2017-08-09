@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
+//import com.sun.xml.internal.bind.v2.TODO;
 
 public class StateGame extends State {
 
@@ -38,7 +39,7 @@ public class StateGame extends State {
     //  Current game state
     private State _state;
 
-    //  Internationalizing
+    //  i18n
     private I18NBundle _lang;
 
     //  Loading feedback
@@ -55,7 +56,7 @@ public class StateGame extends State {
     private Button _resetButton;
     private Button _exitButton;
     private Button _musicButton;
-    private Button _pauseButton;
+    //private Button _pauseButton;
 
     // Textures
     private TextureRegion _imgBackground;
@@ -132,43 +133,36 @@ public class StateGame extends State {
     public StateGame(EsthetiqueGems esthetiqueGems) {
         super(esthetiqueGems);
 
-        // Language
-        _lang = new I18NBundle();
-        _loading = new SplashLoad(_parent, "Loading_Game");
-
         // Initial state
         _state = State.Loading;
 
-        // Create buttons
-        _exitButton = new Button(_parent, 56, 394, "");
-        _resetButton = new Button(_parent, 186, 394, "");
-        _musicButton = new Button(_parent, 316, 394, "");
-        _hintButton = new Button(_parent, 576, 394, "");
-        _pauseButton = new Button(_parent, 446, 394, "");
+        _lang = new I18NBundle();
+
+        _loading = new SplashLoad(_parent, "Loading_Game");
 
         // Creare board
-        _board = new Board();
 
-        // Time txt
-        _txtTime = "";
-
-        _selectedSquareFirst = new Coord(-1, -1);
-        _selectedSquareSecond = new Coord(-1, -1);
-
-        // Scores
-        _floatingScores = new Array<FloatingScore>();
+        // Resources are initially null
+        _imgBackground = null;
 
         // Mouse pos
         _mousePos = new Vector3();
+
+        _txtTime = "";
+
+        _floatingScores = new Array<FloatingScore>();
+
+        _layout = new GlyphLayout();
+
+        _board = new Board();
+        _selectedSquareFirst = new Coord(-1, -1);
+        _selectedSquareSecond = new Coord(-1, -1);
 
         // Particle effects
         _effect = new ParticleEffect();
         _effect.load(Gdx.files.internal("data/particleStars"), Gdx.files.internal("img"));
         _effectPool = new ParticleEffectPool(_effect, 20, 100);
-
         _effects = new Array<ParticleEffectPool.PooledEffect>();
-
-        _layout = new GlyphLayout();
 
         // Init game for the first time
         init();
@@ -176,8 +170,8 @@ public class StateGame extends State {
 
     @Override
     public void load() {
-        AssetManager assetManager = _parent.getAssetManager();
-
+        // LCD Font are only here in use.
+        // TODO: Not the a clean way to assigning the font resource at loading?
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/lcd.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
@@ -186,22 +180,19 @@ public class StateGame extends State {
         fontParameter.magFilter = Texture.TextureFilter.Linear;
         fontParameter.minFilter = Texture.TextureFilter.Linear;
         fontParameter.color = new Color(0f, 0f, 0f, 1f);
-        fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
-        fontParameter.shadowOffsetY = 3;
+        //fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
+        //fontParameter.shadowOffsetY = 3;
         fontParameter.flip = true;
         _fontLCD = fontGenerator.generateFont(fontParameter);
         _fontLCD.setUseIntegerPositions(false);
         fontGenerator.dispose();
 
+        AssetManager assetManager = _parent.getAssetManager();
         assetManager.load("i18n/stateGame", I18NBundle.class);
         assetManager.load("i18n/stateScoreTable", I18NBundle.class);
-        assetManager.load("img/scoreBackground.png", Texture.class);
-        assetManager.load("img/btnBg.png", Texture.class);
-        assetManager.load("img/btnClickedBg.png", Texture.class);
         assetManager.load("img/stateGameBg.png", Texture.class);
         assetManager.load("img/selector.png", Texture.class);
         assetManager.load("img/hint.png", Texture.class);
-        assetManager.load("img/timeBg.png", Texture.class);
         assetManager.load("img/gemWhite.png", Texture.class);
         assetManager.load("img/gemRed.png", Texture.class);
         assetManager.load("img/gemPurple.png", Texture.class);
@@ -209,12 +200,16 @@ public class StateGame extends State {
         assetManager.load("img/gemGreen.png", Texture.class);
         assetManager.load("img/gemYellow.png", Texture.class);
         assetManager.load("img/gemBlue.png", Texture.class);
-        assetManager.load("img/iconHint.png", Texture.class);
-        assetManager.load("img/iconRestart.png", Texture.class);
-        assetManager.load("img/iconExit.png", Texture.class);
-        assetManager.load("img/iconMusicOn.png", Texture.class);
-        assetManager.load("img/iconMusicOff.png", Texture.class);
-        assetManager.load("img/iconPause.png", Texture.class);
+        assetManager.load("img/btnExit.png",Texture.class);
+        assetManager.load("img/btnExitClicked.png", Texture.class);
+        assetManager.load("img/btnRestart.png",Texture.class);
+        assetManager.load("img/btnRestartClicked.png",Texture.class);
+        assetManager.load("img/btnMusicOn.png",Texture.class);
+        assetManager.load("img/btnMusicOnClicked.png",Texture.class);
+        assetManager.load("img/btnMusicOff.png",Texture.class);
+        assetManager.load("img/btnMusicOffClicked.png",Texture.class);
+        assetManager.load("img/btnHint.png",Texture.class);
+        assetManager.load("img/btnHintClicked.png",Texture.class);
         assetManager.load("audio/match1.ogg", Sound.class);
         assetManager.load("audio/match2.ogg", Sound.class);
         assetManager.load("audio/match3.ogg", Sound.class);
@@ -222,14 +217,20 @@ public class StateGame extends State {
         assetManager.load("audio/fall.ogg", Sound.class);
         assetManager.load("audio/music1.ogg", Music.class);
 
+        // TODO: Same as LCD font. Reste game parameters at loading?
         resetGame();
     }
 
     @Override
     public void unload() {
-        // Set assets references to null
-        _lang = null;
+
+        // Set references to null
         _imgBackground = null;
+        _hintButton.setNull();
+        _resetButton.setNull();
+        _exitButton.setNull();
+        _musicButton.setNull();
+        //_pauseButton.setNull();
         _imgWhite = null;
         _imgRed = null;
         _imgPurple = null;
@@ -238,40 +239,20 @@ public class StateGame extends State {
         _imgYellow = null;
         _imgBlue = null;
         _imgSelector = null;
-        _imgScoreBackground = null;
-        _imgTimeBackground = null;
         _match1SFX = null;
         _match2SFX = null;
         _match3SFX = null;
         _selectSFX = null;
         _fallSFX = null;
         _song = null;
-
-        _hintButton.setIcon(null);
-        _resetButton.setIcon(null);
-        _exitButton.setIcon(null);
-        _musicButton.setIcon(null);
-        _pauseButton.setIcon(null);
-        _pauseButton.setIconClicked(null);
-
-        _hintButton.setBackground(null);
-        _resetButton.setBackground(null);
-        _exitButton.setBackground(null);
-        _musicButton.setBackground(null);
-        _pauseButton.setBackground(null);
+        _lang = null;
 
         // Unload assets
         AssetManager assetManager = _parent.getAssetManager();
-
         assetManager.unload("i18n/stateGame");
         assetManager.unload("i18n/stateScoreTable");
-        assetManager.unload("img/scoreBackground.png");
-        assetManager.unload("img/btnBg.png");
-        assetManager.unload("img/btnClickedBg.png");
         assetManager.unload("img/stateGameBg.png");
         assetManager.unload("img/selector.png");
-        assetManager.unload("img/hint.png");
-        assetManager.unload("img/timeBg.png");
         assetManager.unload("img/gemWhite.png");
         assetManager.unload("img/gemRed.png");
         assetManager.unload("img/gemPurple.png");
@@ -279,12 +260,16 @@ public class StateGame extends State {
         assetManager.unload("img/gemGreen.png");
         assetManager.unload("img/gemYellow.png");
         assetManager.unload("img/gemBlue.png");
-        assetManager.unload("img/iconHint.png");
-        assetManager.unload("img/iconRestart.png");
-        assetManager.unload("img/iconExit.png");
-        assetManager.unload("img/iconMusicOn.png");
-        assetManager.unload("img/iconMusicOff.png");
-        assetManager.unload("img/iconPause.png");
+        assetManager.unload("img/btnExit.png");
+        assetManager.unload("img/btnExitClicked.png");
+        assetManager.unload("img/btnRestart.png");
+        assetManager.unload("img/btnRestartClicked.png");
+        assetManager.unload("img/btnMusicOn.png");
+        assetManager.unload("img/btnMusicOnClicked.png");
+        assetManager.unload("img/btnMusicOff.png");
+        assetManager.unload("img/btnMusicOffClicked.png");
+        assetManager.unload("img/btnHint.png");
+        assetManager.unload("img/btnHintClicked.png");
         assetManager.unload("audio/match1.ogg");
         assetManager.unload("audio/match2.ogg");
         assetManager.unload("audio/match3.ogg");
@@ -300,74 +285,76 @@ public class StateGame extends State {
 
         AssetManager assetManager = _parent.getAssetManager();
 
-        // Load textures
-        _imgScoreBackground = new TextureRegion(assetManager.get("img/scoreBackground.png", Texture.class));
-        _imgBackground = new TextureRegion(assetManager.get("img/stateGameBg.png", Texture.class));
-        _imgSelector = new TextureRegion(assetManager.get("img/selector.png", Texture.class));
-        _imgHint = new TextureRegion(assetManager.get("img/hint.png", Texture.class));
-        _imgTimeBackground = new TextureRegion(assetManager.get("img/timeBg.png", Texture.class));
-        _imgWhite = new TextureRegion(assetManager.get("img/gemWhite.png", Texture.class));
-        _imgRed = new TextureRegion(assetManager.get("img/gemRed.png", Texture.class));
-        _imgPurple = new TextureRegion(assetManager.get("img/gemPurple.png", Texture.class));
-        _imgOrange = new TextureRegion(assetManager.get("img/gemOrange.png", Texture.class));
-        _imgGreen = new TextureRegion(assetManager.get("img/gemGreen.png", Texture.class));
-        _imgYellow = new TextureRegion(assetManager.get("img/gemYellow.png", Texture.class));
-        _imgBlue = new TextureRegion(assetManager.get("img/gemBlue.png", Texture.class));
-
-        _imgScoreBackground.flip(false, true);
-        _imgBackground.flip(false, true);
-        _imgSelector.flip(false, true);
-        _imgTimeBackground.flip(false, true);
-        _imgWhite.flip(false, true);
-        _imgRed.flip(false, true);
-        _imgPurple.flip(false, true);
-        _imgOrange.flip(false, true);
-        _imgGreen.flip(false, true);
-        _imgYellow.flip(false, true);
-        _imgBlue.flip(false, true);
-
-        // Language bundle
         _lang = assetManager.get("i18n/stateGame", I18NBundle.class);
 
-        // Button textures and font
-        TextureRegion buttonBackground = new TextureRegion(assetManager.get("img/btnBg.png", Texture.class));
-        TextureRegion buttonBackgroundClicked = new TextureRegion(assetManager.get("img/btnClickedBg.png", Texture.class));
-        TextureRegion iconHint = new TextureRegion(assetManager.get("img/iconHint.png", Texture.class));
-        TextureRegion iconRestart = new TextureRegion(assetManager.get("img/iconRestart.png", Texture.class));
-        TextureRegion iconExit = new TextureRegion(assetManager.get("img/iconExit.png", Texture.class));
-        TextureRegion iconMusicOn = new TextureRegion(assetManager.get("img/iconMusicOn.png", Texture.class));
-        TextureRegion iconMusicOff = new TextureRegion(assetManager.get("img/iconMusicOff.png", Texture.class));
-        TextureRegion iconPause = new TextureRegion(assetManager.get("img/iconPause.png", Texture.class));
+        // Button Exit
+        TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
+        TextureRegion btnExitClicked = new TextureRegion(assetManager.get("img/btnExitClicked.png", Texture.class));
+        btnExit.flip(false,true);
+        btnExitClicked.flip(false,true);
+        _exitButton = new Button(_parent, 56, 394);
+        _exitButton.setNormal(btnExit, btnExitClicked);
 
-        buttonBackground.flip(false, true);
-        iconHint.flip(false, true);
-        iconRestart.flip(false, true);
-        iconExit.flip(false, true);
-        iconMusicOn.flip(false, true);
-        iconMusicOff.flip(false,true);
-        iconPause.flip(false, true);
+        // Button Restart
+        TextureRegion btnRestart = new TextureRegion(assetManager.get("img/btnRestart.png", Texture.class));
+        TextureRegion btnRestartClicked = new TextureRegion(assetManager.get("img/btnRestartClicked.png", Texture.class));
+        btnRestart.flip(false,true);
+        btnRestartClicked.flip(false,true);
+        _resetButton = new Button(_parent, 186, 394);
+        _resetButton.setNormal(btnRestart, btnRestartClicked);
 
-        _hintButton.setIcon(iconHint);
-        _resetButton.setIcon(iconRestart);
-        _exitButton.setIcon(iconExit);
-        _musicButton.setIcon(iconMusicOn);
-        _pauseButton.setIcon(iconPause);
+        // Button Music On/Off
+        TextureRegion btnMusicOn = new TextureRegion(assetManager.get("img/btnMusicOn.png", Texture.class));
+        TextureRegion btnMusicOnClicked = new TextureRegion(assetManager.get("img/btnMusicOnClicked.png", Texture.class));
+        btnMusicOn.flip(false,true);
+        btnMusicOnClicked.flip(false,true);
+        TextureRegion btnMusicOff = new TextureRegion(assetManager.get("img/btnMusicOff.png", Texture.class));
+        TextureRegion btnMusicOffClicked = new TextureRegion(assetManager.get("img/btnMusicOffClicked.png", Texture.class));
+        btnMusicOff.flip(false,true);
+        btnMusicOffClicked.flip(false,true);
+        _musicButton = new Button(_parent, 316, 394);
+        _musicButton.setNormal(btnMusicOff, btnMusicOffClicked);
+        _musicButton.setSwitch(btnMusicOn, btnMusicOnClicked);
+        _musicButton.setModeOn(false);
 
-        _musicButton.setIconClicked(iconMusicOff);
+        // Button Hint
+        TextureRegion btnHint = new TextureRegion(assetManager.get("img/btnHint.png", Texture.class));
+        TextureRegion btnHintClicked = new TextureRegion(assetManager.get("img/btnHintClicked.png", Texture.class));
+        btnHint.flip(false,true);
+        btnHintClicked.flip(false,true);
+        _hintButton = new Button(_parent, 576, 394);
+        _hintButton.setNormal(btnHint, btnHintClicked);
 
-        _hintButton.setBackground(buttonBackground);
-        _resetButton.setBackground(buttonBackground);
-        _exitButton.setBackground(buttonBackground);
-        _musicButton.setBackground(buttonBackground);
-        _pauseButton.setBackground(buttonBackground);
+        _imgBackground = new TextureRegion(assetManager.get("img/stateGameBg.png", Texture.class));
+        _imgBackground.flip(false,true);
 
-        _hintButton.setBackgroundClicked(buttonBackgroundClicked);
-        _resetButton.setBackgroundClicked(buttonBackgroundClicked);
-        _exitButton.setBackgroundClicked(buttonBackgroundClicked);
-        _musicButton.setBackgroundClicked(buttonBackgroundClicked);
-        _pauseButton.setBackgroundClicked(buttonBackgroundClicked);
+        _imgSelector = new TextureRegion(assetManager.get("img/selector.png", Texture.class));
+        _imgSelector.flip(false, true);
 
-        // Load SFX and music
+        _imgHint = new TextureRegion(assetManager.get("img/hint.png", Texture.class));
+        // flipping make no sense
+
+        _imgWhite = new TextureRegion(assetManager.get("img/gemWhite.png", Texture.class));
+        _imgWhite.flip(false, true);
+
+        _imgRed = new TextureRegion(assetManager.get("img/gemRed.png", Texture.class));
+        _imgRed.flip(false, true);
+
+        _imgPurple = new TextureRegion(assetManager.get("img/gemPurple.png", Texture.class));
+        _imgPurple.flip(false, true);
+
+        _imgOrange = new TextureRegion(assetManager.get("img/gemOrange.png", Texture.class));
+        _imgOrange.flip(false, true);
+
+        _imgGreen = new TextureRegion(assetManager.get("img/gemGreen.png", Texture.class));
+        _imgGreen.flip(false, true);
+
+        _imgYellow = new TextureRegion(assetManager.get("img/gemYellow.png", Texture.class));
+        _imgYellow.flip(false, true);
+
+        _imgBlue = new TextureRegion(assetManager.get("img/gemBlue.png", Texture.class));
+        _imgBlue.flip(false, true);
+
         _match1SFX = assetManager.get("audio/match1.ogg", Sound.class);
         _match2SFX = assetManager.get("audio/match2.ogg", Sound.class);
         _match3SFX = assetManager.get("audio/match3.ogg", Sound.class);
@@ -649,18 +636,9 @@ public class StateGame extends State {
         _resetButton.render();
         _musicButton.render();
         _exitButton.render();
+        // TODO: Adding pause/resume (?)
         // _pauseButton.render();
 
-        // Draw the score
-        batch.draw(_imgScoreBackground, 295, 510);
-        // Draw the time
-        batch.draw(_imgTimeBackground, 56, 510);
-
-        _layout.setText(_fontLCD, Integer.toString(_points));
-        _fontLCD.draw(batch, Integer.toString(_points), 648 - _layout.width, 530);
-
-        _layout.setText(_fontLCD, _txtTime);
-        _fontLCD.draw(batch, _txtTime, 264 - _layout.width, 530);
 
         // Draw board
         TextureRegion img = null;
@@ -816,6 +794,12 @@ public class StateGame extends State {
             }
         }
 
+        _layout.setText(_fontLCD, Integer.toString(_points));
+        _fontLCD.draw(batch, Integer.toString(_points), 648 - _layout.width, 530);
+
+        _layout.setText(_fontLCD, _txtTime);
+        _fontLCD.draw(batch, _txtTime, 264 - _layout.width, 530);
+
         // Score table
         if (_scoreTable != null && _state == State.ShowingScoreTable) {
             _scoreTable.draw();
@@ -887,13 +871,13 @@ public class StateGame extends State {
                 _state = State.DisappearingBoard;
                 gemsOutScreen();
                 resetGame();
-            } else if (_pauseButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
+            } /* else if (_pauseButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 if (_state == State.Wait) {
                     // PAUSE
                 } else {
                     // RESUME
                 }
-            } else if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
+            } */ else if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
                 _selectSFX.play();
 
                 if (_state == State.Wait) { // No gems marked
@@ -935,7 +919,7 @@ public class StateGame extends State {
             _musicButton.touchUp();
             _exitButton.touchUp();
             _resetButton.touchUp();
-            _pauseButton.touchUp();
+            //_pauseButton.touchUp();
         }
 
         return false;

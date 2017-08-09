@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.badlogic.gdx.utils.IntArray;
+
 
 public class StateMenu extends State {
 
@@ -96,9 +96,6 @@ public class StateMenu extends State {
     @Override
     public void load() {
 
-        //  Load score preferences
-        _prefScore = Gdx.app.getPreferences("score");
-
         AssetManager assetManager = _parent.getAssetManager();
         assetManager.load("i18n/stateMainMenu", I18NBundle.class);
         assetManager.load("img/stateMainMenuBg.png", Texture.class);
@@ -109,24 +106,39 @@ public class StateMenu extends State {
         assetManager.load("img/gemGreen.png", Texture.class);
         assetManager.load("img/gemYellow.png", Texture.class);
         assetManager.load("img/gemBlue.png", Texture.class);
-        assetManager.load("img/btnBg.png", Texture.class);
-        assetManager.load("img/btnClickedBg.png", Texture.class);
-        assetManager.load("img/btnLargeBg.png", Texture.class);
-        assetManager.load("img/btnLargeClickedBg.png", Texture.class);
-        assetManager.load("img/iconPlay.png", Texture.class);
-        assetManager.load("img/iconHowto.png", Texture.class);
-        assetManager.load("img/iconCredits.png", Texture.class);
-        assetManager.load("img/iconExit.png", Texture.class);
+        assetManager.load("img/btnStart.png", Texture.class);
+        assetManager.load("img/btnStartClicked.png", Texture.class);
+        assetManager.load("img/btnExit.png", Texture.class);
+        assetManager.load("img/btnExitClicked.png", Texture.class);
+        assetManager.load("img/btnHowto.png", Texture.class);
+        assetManager.load("img/btnHowtoClicked.png", Texture.class);
+        assetManager.load("img/btnCredits.png", Texture.class);
+        assetManager.load("img/btnCreditsClicked.png", Texture.class);
         assetManager.load("audio/select.ogg", Sound.class);
-
     }
 
     @Override
     public void unload() {
 
+        // Set references to null
+        _prefScore = null;
+        _imgBackground = null;
+        _playButton.setNull();
+        _howtoButton.setNull();
+        _creditsButton.setNull();
+        _quitButton.setNull();
+        _txtPlayerName = null;
+        _txtPlayerScore = null;
+        _txtTopScoreTitle = null;
+        _txtPlayerNamePos = null;
+        _txtPlayerScorePos = null;
+        _txtTopScoreTitlePos = null;
+        _lang = null;
+        _selectSFX = null;
+        _gems = null;
+
         // Unload resources
         AssetManager assetManager = _parent.getAssetManager();
-
         assetManager.unload("i18n/stateMainMenu");
         assetManager.unload("img/stateMainMenuBg.png");
         assetManager.unload("img/gemWhite.png");
@@ -136,32 +148,15 @@ public class StateMenu extends State {
         assetManager.unload("img/gemGreen.png");
         assetManager.unload("img/gemYellow.png");
         assetManager.unload("img/gemBlue.png");
-        assetManager.unload("img/btnBg.png");
-        assetManager.unload("img/btnClickedBg.png");
-        assetManager.unload("img/btnLargeBg.png");
-        assetManager.unload("img/btnLargeClickedBg.png");
-        assetManager.unload("img/iconPlay.png");
-        assetManager.unload("img/iconHowto.png");
-        assetManager.unload("img/iconCredits.png");
-        assetManager.unload("img/iconExit.png");
+        assetManager.unload("img/btnStart.png");
+        assetManager.unload("img/btnStartClicked.png");
+        assetManager.unload("img/btnExit.png");
+        assetManager.unload("img/btnExitClicked.png");
+        assetManager.unload("img/btnHowto.png");
+        assetManager.unload("img/btnHowtoClicked.png");
+        assetManager.unload("img/btnCredits.png");
+        assetManager.unload("img/btnCreditsClicked.png");
         assetManager.unload("audio/select.ogg");
-
-        // Set references to null
-        _prefScore = null;
-        _imgBackground = null;
-        _txtPlayerName = null;
-        _txtPlayerScore = null;
-        _txtTopScoreTitle = null;
-        _txtPlayerNamePos = null;
-        _txtPlayerScorePos = null;
-        _txtTopScoreTitlePos = null;
-        _playButton.setNull();
-        _howtoButton.setNull();
-        _creditsButton.setNull();
-        _quitButton.setNull();
-        _lang = null;
-        _selectSFX = null;
-        _gems = null;
 
     }
 
@@ -170,31 +165,50 @@ public class StateMenu extends State {
 
         AssetManager assetManager = _parent.getAssetManager();
 
-        // Button textures and font
-        TextureRegion buttonBackgroundLarge = new TextureRegion(assetManager.get("img/btnLargeBg.png", Texture.class));
-        TextureRegion buttonBackgroundLargeClicked = new TextureRegion(assetManager.get("img/btnLargeClickedBg.png", Texture.class));
-        TextureRegion buttonBackground = new TextureRegion(assetManager.get("img/btnBg.png", Texture.class));
-        TextureRegion buttonBackgroundClicked = new TextureRegion(assetManager.get("img/btnClickedBg.png", Texture.class));
-        TextureRegion iconPlay = new TextureRegion(assetManager.get("img/iconPlay.png", Texture.class));
-        TextureRegion iconHowto = new TextureRegion(assetManager.get("img/iconHowto.png", Texture.class));
-        TextureRegion iconCredits = new TextureRegion(assetManager.get("img/iconCredits.png", Texture.class));
-        TextureRegion iconQuit = new TextureRegion(assetManager.get("img/iconExit.png", Texture.class));
-
-        buttonBackground.flip(false, true);
-        buttonBackgroundClicked.flip(false, true);
-        buttonBackgroundLarge.flip(false, true);
-        buttonBackgroundLargeClicked.flip(false, true);
-        iconPlay.flip(false, true);
-        iconHowto.flip(false, true);
-        iconCredits.flip(false, true);
-        iconQuit.flip(false, true);
-
         _lang = assetManager.get("i18n/stateMainMenu", I18NBundle.class);
+
+        // Button Play
+        TextureRegion btnPlay = new TextureRegion(assetManager.get("img/btnStart.png", Texture.class));
+        TextureRegion btnPlayClicked = new TextureRegion(assetManager.get("img/btnStartClicked.png", Texture.class));
+        btnPlay.flip(false,true);
+        btnPlayClicked.flip(false,true);
+        _playButton = new Button(_parent, 156, 794);
+        _playButton.setNormal(btnPlay, btnPlayClicked);
+        _playButton.setFont(_parent._fontH1);
+        _playButton.setText(_lang.get("Menu_StartGame"));
+        _playButton.setTextPos(156 + 74 + 66, 814 );
+
+        // Button EXIT
+        TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
+        TextureRegion btnExitClicked = new TextureRegion(assetManager.get("img/btnExitClicked.png", Texture.class));
+        btnExit.flip(false,true);
+        btnExitClicked.flip(false,true);
+        _quitButton = new Button(_parent, 156, 894);
+        _quitButton.setNormal(btnExit, btnExitClicked);
+
+        // Button How to
+        TextureRegion btnHowto = new TextureRegion(assetManager.get("img/btnHowto.png", Texture.class));
+        TextureRegion btnHowtoClicked = new TextureRegion(assetManager.get("img/btnHowtoClicked.png", Texture.class));
+        btnHowto.flip(false,true);
+        btnHowtoClicked.flip(false,true);
+        _howtoButton = new Button(_parent, 322, 894);
+        _howtoButton.setNormal(btnHowto, btnHowtoClicked);
+
+        // Button Credits
+        TextureRegion btnCredits = new TextureRegion(assetManager.get("img/btnCredits.png", Texture.class));
+        TextureRegion btnCreditsClicked = new TextureRegion(assetManager.get("img/btnCreditsClicked.png", Texture.class));
+        btnCredits.flip(false,true);
+        btnCreditsClicked.flip(false,true);
+        _creditsButton = new Button(_parent, 496, 894);
+        _creditsButton.setNormal(btnCredits, btnCreditsClicked);
 
         _imgBackground = new TextureRegion(assetManager.get("img/stateMainMenuBg.png", Texture.class));
         _imgBackground.flip(false, true);
 
         _selectSFX = assetManager.get("audio/select.ogg", Sound.class);
+
+        //  Load score preferences
+        _prefScore = Gdx.app.getPreferences("score");
 
         _txtTopScoreTitle = _lang.get("Menu_TopScoreTitle");
         _txtPlayerName = _prefScore.getString("name", _lang.get("Menu_MissingName"));
@@ -206,30 +220,6 @@ public class StateMenu extends State {
         _txtPlayerNamePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 600);
         _layout.setText(_parent._fontH1, _txtPlayerScore);
         _txtPlayerScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 640);
-
-        _playButton = new Button(_parent, 156, 794, _lang.get("Menu_StartGame"));
-        _quitButton = new Button(_parent, 156, 894, "");
-        _howtoButton = new Button(_parent, 322, 894, "");
-        _creditsButton = new Button(_parent, 496, 894, "");
-
-        _playButton.setTextGab(120, 24);
-
-        _playButton.setIcon(iconPlay);
-        _playButton.setBackground(buttonBackgroundLarge);
-        _playButton.setBackgroundClicked(buttonBackgroundLargeClicked);
-        _playButton.setFont(_parent._fontH1);
-
-        _howtoButton.setIcon(iconHowto);
-        _howtoButton.setBackground(buttonBackground);
-        _howtoButton.setBackgroundClicked(buttonBackgroundClicked);
-
-        _creditsButton.setIcon(iconCredits);
-        _creditsButton.setBackground(buttonBackground);
-        _creditsButton.setBackgroundClicked(buttonBackgroundClicked);
-
-        _quitButton.setIcon(iconQuit);
-        _quitButton.setBackground(buttonBackground);
-        _quitButton.setBackgroundClicked(buttonBackgroundClicked);
 
         _gems = new GemsAnimation(_parent);
 
@@ -247,7 +237,6 @@ public class StateMenu extends State {
         } else if (_state == State.TransitionIn) {
             if ((_animTime += deltaT) >= _animTotalTime) {
                 _state = State.Active;
-//                _animTime = _animLogoTime;
             }
         } else if (_state == State.Active) {
 
