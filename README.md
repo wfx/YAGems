@@ -11,8 +11,8 @@ which is a clone of Bejewels
 Assets for this game:<br>
 [Esthetique-Gems-Assets](https://github.com/wfx/Esthetique-Gems-Assets)<br>
 
-\[1\] [Freegemas](github.com/aliexx/freegemas)<br>
-\[2\] [Freegemas-xdg](github.com/saltares/freegemas-gdx)
+\[1\] [Freegemas](https://github.com/aliexx/freegemas)<br>
+\[2\] [Freegemas-xdg](https://github.com/saltares/freegemas-gdx)
 
 Font by Lauren Ruth www.nymfont.com<br>
 Music by Eric Matyas www.soundimage.org<br>
