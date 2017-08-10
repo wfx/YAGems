@@ -1,5 +1,14 @@
 # Esthetique-Gems
-Match 3 Game
+### A match 3 Game
+
+Primary target system is Android but it will also runs on all java suported Desktop.<br>
+It is ads free and there is also none tracking or other data colecting system inside.<br>
+<br>
+Just the game :)<br>
+<br>
+<br>
+Have a lot of fun.<br>
+wfx
 
 ![Screenshot](https://raw.githubusercontent.com/wfx/Esthetique-Gems/master/android/assets/screenshot.png)
 
