@@ -217,9 +217,9 @@ public class StateMenu extends State {
         _layout.setText(_parent._fontH1, _txtTopScoreTitle);
         _txtTopScoreTitlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 560);
         _layout.setText(_parent._fontH1, _txtPlayerName);
-        _txtPlayerNamePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 600);
+        _txtPlayerNamePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 610);
         _layout.setText(_parent._fontH1, _txtPlayerScore);
-        _txtPlayerScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 640);
+        _txtPlayerScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 660);
 
         _gems = new GemsAnimation(_parent);
 

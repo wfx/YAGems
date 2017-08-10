@@ -64,7 +64,7 @@ public class ScoreTable implements Input.TextInputListener {
         Integer _playerScore = _prefScore.getInteger("score", 0);
 
         if (_points > _playerScore) {
-            String _defaultName = _prefConfig.getString("defaultName", "Anonymous");
+            String _defaultName = _prefConfig.getString("defaultName", _lang.get("Score_Table_MissingName"));
             Gdx.input.getTextInput(this, _lang.get("ScoreTable_EnterName"), _defaultName, "");
         }
         else

@@ -19,7 +19,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
-//import com.sun.xml.internal.bind.v2.TODO;
 
 public class StateGame extends State {
 
@@ -40,7 +39,7 @@ public class StateGame extends State {
     private State _state;
 
     //  i18n
-    private I18NBundle _lang;
+    //private I18NBundle _lang;
 
     //  Loading feedback
     SplashLoad _loading;
@@ -105,10 +104,6 @@ public class StateGame extends State {
     private int _multiplier = 0;
     private String _txtTime;
 
-    // Background textures
-    private TextureRegion _imgScoreBackground;
-    private TextureRegion _imgTimeBackground;
-
     // Starting time
     private double _remainingTime;
     private double _penaltyTime;
@@ -138,7 +133,7 @@ public class StateGame extends State {
         // Initial state
         _state = State.Loading;
 
-        _lang = new I18NBundle();
+        //_lang = new I18NBundle();
 
         _loading = new SplashLoad(_parent, "Loading_Game");
 
@@ -195,7 +190,7 @@ public class StateGame extends State {
         fontGenerator.dispose();
 
         AssetManager assetManager = _parent.getAssetManager();
-        assetManager.load("i18n/stateGame", I18NBundle.class);
+        //assetManager.load("i18n/stateGame", I18NBundle.class);
         assetManager.load("i18n/stateScoreTable", I18NBundle.class);
         assetManager.load("img/stateGameBg.png", Texture.class);
         assetManager.load("img/stateGameScoreTableBg.png", Texture.class);
@@ -254,11 +249,11 @@ public class StateGame extends State {
         _selectSFX = null;
         _fallSFX = null;
         _song = null;
-        _lang = null;
+        //_lang = null;
 
         // Unload assets
         AssetManager assetManager = _parent.getAssetManager();
-        assetManager.unload("i18n/stateGame");
+        //assetManager.unload("i18n/stateGame");
         assetManager.unload("i18n/stateScoreTable");
         assetManager.unload("img/stateGameBg.png");
         assetManager.unload("img/stateGameScoreTableBg.png");
@@ -295,7 +290,7 @@ public class StateGame extends State {
 
         AssetManager assetManager = _parent.getAssetManager();
 
-        _lang = assetManager.get("i18n/stateGame", I18NBundle.class);
+        //_lang = assetManager.get("i18n/stateGame", I18NBundle.class);
 
         // Button Exit
         TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
@@ -460,10 +455,10 @@ public class StateGame extends State {
                 _state = State.DisappearingGems;
 
                 // Swap gems in the board
-                _board.swap((int) _selectedSquareFirst.x,
-                        (int) _selectedSquareFirst.y,
-                        (int) _selectedSquareSecond.x,
-                        (int) _selectedSquareSecond.y);
+                _board.swap( _selectedSquareFirst.x,
+                         _selectedSquareFirst.y,
+                         _selectedSquareSecond.x,
+                         _selectedSquareSecond.y);
 
                 // Increase multiplier
                 ++_multiplier;
@@ -494,8 +489,8 @@ public class StateGame extends State {
                 // Delete squares that were matched on the board
                 for (int i = 0; i < _groupedSquares.size; ++i) {
                     for (int j = 0; j < _groupedSquares.get(i).size; ++j) {
-                        _board.del((int) _groupedSquares.get(i).get(j).x,
-                                (int) _groupedSquares.get(i).get(j).y);
+                        _board.del( _groupedSquares.get(i).get(j).x,
+                                 _groupedSquares.get(i).get(j).y);
                     }
                 }
 
@@ -1007,11 +1002,11 @@ public class StateGame extends State {
             }
 
             // Difficulties
-            System.out.println("### Time      : " + _remainingTime + " ###\n");
-            _remainingTime += 1 + _multiplier;
-            System.out.println("### matchSize : " + matchSize + " ###\n");
-            System.out.println("### multiplier: " + _multiplier + " ###\n");
-            System.out.println("### Time now  : " + _remainingTime + " ###\n");
+            // System.out.println("### Time      : " + _remainingTime + " ###\n");
+            _remainingTime += _multiplier + (matchSize -2);
+            // System.out.println("### matchSize : " + matchSize + " ###\n");
+            // System.out.println("### multiplier: " + _multiplier + " ###\n");
+            // System.out.println("### Time now  : " + _remainingTime + " ###\n");
             _remainingTime -= _penaltyTime;
             _points += matchSize * 5 * _penaltyTime;
             if (_points >= 1500) {
