@@ -48,6 +48,7 @@ public class StateGame extends State {
     // Fonts
     // _fontH1, _fontP
     private BitmapFont _fontLCD;
+    private BitmapFont _fontFloatScore;
 
     private GlyphLayout _layout;
 
@@ -60,6 +61,7 @@ public class StateGame extends State {
 
     // Textures
     private TextureRegion _imgBackground;
+    private TextureRegion _imgBackgroundScoreTable;
     private TextureRegion _imgWhite;
     private TextureRegion _imgRed;
     private TextureRegion _imgPurple;
@@ -144,6 +146,7 @@ public class StateGame extends State {
 
         // Resources are initially null
         _imgBackground = null;
+        _imgBackgroundScoreTable = null;
 
         // Mouse pos
         _mousePos = new Vector3();
@@ -180,17 +183,22 @@ public class StateGame extends State {
         fontParameter.magFilter = Texture.TextureFilter.Linear;
         fontParameter.minFilter = Texture.TextureFilter.Linear;
         fontParameter.color = new Color(0f, 0f, 0f, 1f);
-        //fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
-        //fontParameter.shadowOffsetY = 3;
+        fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
+        fontParameter.shadowOffsetY = 3;
         fontParameter.flip = true;
+        fontParameter.characters = "1234567890:";
         _fontLCD = fontGenerator.generateFont(fontParameter);
         _fontLCD.setUseIntegerPositions(false);
+        fontParameter.color = Color.GOLD;
+        _fontFloatScore = fontGenerator.generateFont(fontParameter);
+        _fontFloatScore.setUseIntegerPositions(false);
         fontGenerator.dispose();
 
         AssetManager assetManager = _parent.getAssetManager();
         assetManager.load("i18n/stateGame", I18NBundle.class);
         assetManager.load("i18n/stateScoreTable", I18NBundle.class);
         assetManager.load("img/stateGameBg.png", Texture.class);
+        assetManager.load("img/stateGameScoreTableBg.png", Texture.class);
         assetManager.load("img/selector.png", Texture.class);
         assetManager.load("img/hint.png", Texture.class);
         assetManager.load("img/gemWhite.png", Texture.class);
@@ -200,16 +208,16 @@ public class StateGame extends State {
         assetManager.load("img/gemGreen.png", Texture.class);
         assetManager.load("img/gemYellow.png", Texture.class);
         assetManager.load("img/gemBlue.png", Texture.class);
-        assetManager.load("img/btnExit.png",Texture.class);
+        assetManager.load("img/btnExit.png", Texture.class);
         assetManager.load("img/btnExitClicked.png", Texture.class);
-        assetManager.load("img/btnRestart.png",Texture.class);
-        assetManager.load("img/btnRestartClicked.png",Texture.class);
-        assetManager.load("img/btnMusicOn.png",Texture.class);
-        assetManager.load("img/btnMusicOnClicked.png",Texture.class);
-        assetManager.load("img/btnMusicOff.png",Texture.class);
-        assetManager.load("img/btnMusicOffClicked.png",Texture.class);
-        assetManager.load("img/btnHint.png",Texture.class);
-        assetManager.load("img/btnHintClicked.png",Texture.class);
+        assetManager.load("img/btnRestart.png", Texture.class);
+        assetManager.load("img/btnRestartClicked.png", Texture.class);
+        assetManager.load("img/btnMusicOn.png", Texture.class);
+        assetManager.load("img/btnMusicOnClicked.png", Texture.class);
+        assetManager.load("img/btnMusicOff.png", Texture.class);
+        assetManager.load("img/btnMusicOffClicked.png", Texture.class);
+        assetManager.load("img/btnHint.png", Texture.class);
+        assetManager.load("img/btnHintClicked.png", Texture.class);
         assetManager.load("audio/match1.ogg", Sound.class);
         assetManager.load("audio/match2.ogg", Sound.class);
         assetManager.load("audio/match3.ogg", Sound.class);
@@ -226,6 +234,7 @@ public class StateGame extends State {
 
         // Set references to null
         _imgBackground = null;
+        _imgBackgroundScoreTable = null;
         _hintButton.setNull();
         _resetButton.setNull();
         _exitButton.setNull();
@@ -252,6 +261,7 @@ public class StateGame extends State {
         assetManager.unload("i18n/stateGame");
         assetManager.unload("i18n/stateScoreTable");
         assetManager.unload("img/stateGameBg.png");
+        assetManager.unload("img/stateGameScoreTableBg.png");
         assetManager.unload("img/selector.png");
         assetManager.unload("img/gemWhite.png");
         assetManager.unload("img/gemRed.png");
@@ -290,28 +300,28 @@ public class StateGame extends State {
         // Button Exit
         TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
         TextureRegion btnExitClicked = new TextureRegion(assetManager.get("img/btnExitClicked.png", Texture.class));
-        btnExit.flip(false,true);
-        btnExitClicked.flip(false,true);
+        btnExit.flip(false, true);
+        btnExitClicked.flip(false, true);
         _exitButton = new Button(_parent, 56, 394);
         _exitButton.setNormal(btnExit, btnExitClicked);
 
         // Button Restart
         TextureRegion btnRestart = new TextureRegion(assetManager.get("img/btnRestart.png", Texture.class));
         TextureRegion btnRestartClicked = new TextureRegion(assetManager.get("img/btnRestartClicked.png", Texture.class));
-        btnRestart.flip(false,true);
-        btnRestartClicked.flip(false,true);
+        btnRestart.flip(false, true);
+        btnRestartClicked.flip(false, true);
         _resetButton = new Button(_parent, 186, 394);
         _resetButton.setNormal(btnRestart, btnRestartClicked);
 
         // Button Music On/Off
         TextureRegion btnMusicOn = new TextureRegion(assetManager.get("img/btnMusicOn.png", Texture.class));
         TextureRegion btnMusicOnClicked = new TextureRegion(assetManager.get("img/btnMusicOnClicked.png", Texture.class));
-        btnMusicOn.flip(false,true);
-        btnMusicOnClicked.flip(false,true);
+        btnMusicOn.flip(false, true);
+        btnMusicOnClicked.flip(false, true);
         TextureRegion btnMusicOff = new TextureRegion(assetManager.get("img/btnMusicOff.png", Texture.class));
         TextureRegion btnMusicOffClicked = new TextureRegion(assetManager.get("img/btnMusicOffClicked.png", Texture.class));
-        btnMusicOff.flip(false,true);
-        btnMusicOffClicked.flip(false,true);
+        btnMusicOff.flip(false, true);
+        btnMusicOffClicked.flip(false, true);
         _musicButton = new Button(_parent, 316, 394);
         _musicButton.setNormal(btnMusicOff, btnMusicOffClicked);
         _musicButton.setSwitch(btnMusicOn, btnMusicOnClicked);
@@ -320,13 +330,16 @@ public class StateGame extends State {
         // Button Hint
         TextureRegion btnHint = new TextureRegion(assetManager.get("img/btnHint.png", Texture.class));
         TextureRegion btnHintClicked = new TextureRegion(assetManager.get("img/btnHintClicked.png", Texture.class));
-        btnHint.flip(false,true);
-        btnHintClicked.flip(false,true);
+        btnHint.flip(false, true);
+        btnHintClicked.flip(false, true);
         _hintButton = new Button(_parent, 576, 394);
         _hintButton.setNormal(btnHint, btnHintClicked);
 
         _imgBackground = new TextureRegion(assetManager.get("img/stateGameBg.png", Texture.class));
-        _imgBackground.flip(false,true);
+        _imgBackground.flip(false, true);
+
+        _imgBackgroundScoreTable = new TextureRegion(assetManager.get("img/stateGameScoreTableBg.png", Texture.class));
+        _imgBackgroundScoreTable.flip(false, true);
 
         _imgSelector = new TextureRegion(assetManager.get("img/selector.png", Texture.class));
         _imgSelector.flip(false, true);
@@ -555,14 +568,6 @@ public class StateGame extends State {
 
                 // Reset animation counter
                 _animTime = 0;
-
-                // Steal some time
-                _remainingTime -= _penaltyTime * 4;
-                if (_points > 200) {
-                    _points -= 200;
-                } else {
-                    _points = 0;
-                }
             }
         }
 
@@ -620,7 +625,7 @@ public class StateGame extends State {
     public void render() {
         SpriteBatch batch = _parent.getSpriteBatch();
 
-        batch.totalRenderCalls = 0;
+        // batch.totalRenderCalls = 0;
 
         // STATE LOADING - Just render loading
         if (_state == State.Loading) {
@@ -628,8 +633,12 @@ public class StateGame extends State {
             return;
         }
 
-        // Background image
-        batch.draw(_imgBackground, 0, 0);
+        // Background image: Game or Score table
+        if (_scoreTable != null && _state == State.ShowingScoreTable) {
+            batch.draw(_imgBackgroundScoreTable, 0, 0);
+        } else {
+            batch.draw(_imgBackground, 0, 0);
+        }
 
         // Draw buttons
         _hintButton.render();
@@ -784,7 +793,7 @@ public class StateGame extends State {
             // If a hint is being shown
             if (_showingHint > 0.0) {
                 // Get the opacity percentage
-                float p = (float) (_showingHint / _animHintTotalTime);
+                //float p = (float) (_showingHint / _animHintTotalTime);
 
                 float x = gemsInitial.x + _coordHint.x * 76;
                 float y = gemsInitial.y + _coordHint.y * 76;
@@ -819,8 +828,8 @@ public class StateGame extends State {
             _effects.get(i).draw(batch);
         }
 
-        int calls = batch.totalRenderCalls;
-        System.out.print("### " + Integer.toString(calls) + " ###");
+        //  int calls = batch.totalRenderCalls;
+        // System.out.print("### " + Integer.toString(calls) + " ###");
     }
 
     @Override
@@ -850,9 +859,11 @@ public class StateGame extends State {
             } else if (_hintButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 showHint();
                 // Penalty
-                _remainingTime -= _penaltyTime * 2;
-                if (_points > 100) {
-                    _points -= 100;
+                // decrease time - time/60 * penalty (1,2,3)
+                // decrease point - time
+                _remainingTime -= _remainingTime / 60 * _penaltyTime;
+                if (_points > _remainingTime) {
+                    _points -= _remainingTime;
                 } else {
                     _points = 0;
                 }
@@ -895,7 +906,7 @@ public class StateGame extends State {
             }
         }
 
-        System.out.println("###" + _state.name() + "###");
+        //System.out.println("###" + _state.name() + "###");
         return false;
     }
 
@@ -982,7 +993,7 @@ public class StateGame extends State {
             Match match = _groupedSquares.get(i);
             int matchSize = match.size;
             _floatingScores.add(new FloatingScore(_parent,
-                    _fontLCD,
+                    _fontFloatScore,
                     matchSize * 5 * _multiplier,
                     gemsInitial.x + match.getMidSquare().x * 76 + 5,
                     gemsInitial.y + match.getMidSquare().y * 76 + 5));
@@ -996,15 +1007,17 @@ public class StateGame extends State {
             }
 
             // Difficulties
-            _remainingTime += matchSize * _multiplier;
+            System.out.println("### Time      : " + _remainingTime + " ###\n");
+            _remainingTime += 1 + _multiplier;
+            System.out.println("### matchSize : " + matchSize + " ###\n");
+            System.out.println("### multiplier: " + _multiplier + " ###\n");
+            System.out.println("### Time now  : " + _remainingTime + " ###\n");
             _remainingTime -= _penaltyTime;
-            _points += matchSize * 5 * _multiplier;
-            if (_points >= 1500){
+            _points += matchSize * 5 * _penaltyTime;
+            if (_points >= 1500) {
                 _penaltyTime = 2;
             } else if (_points >= 3000) {
                 _penaltyTime = 3;
-            } else if (_points >= 5000) {
-                _penaltyTime = 4;
             }
         }
     }
