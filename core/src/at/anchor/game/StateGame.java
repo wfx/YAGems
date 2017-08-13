@@ -106,7 +106,7 @@ public class StateGame extends State {
 
     // Starting time
     private double _remainingTime;
-    private double _penaltyTime;
+    private int _penaltyTime;
 
     // Floating scores
     // TODO: Top 5
@@ -455,10 +455,10 @@ public class StateGame extends State {
                 _state = State.DisappearingGems;
 
                 // Swap gems in the board
-                _board.swap( _selectedSquareFirst.x,
-                         _selectedSquareFirst.y,
-                         _selectedSquareSecond.x,
-                         _selectedSquareSecond.y);
+                _board.swap(_selectedSquareFirst.x,
+                        _selectedSquareFirst.y,
+                        _selectedSquareSecond.x,
+                        _selectedSquareSecond.y);
 
                 // Increase multiplier
                 ++_multiplier;
@@ -489,8 +489,8 @@ public class StateGame extends State {
                 // Delete squares that were matched on the board
                 for (int i = 0; i < _groupedSquares.size; ++i) {
                     for (int j = 0; j < _groupedSquares.get(i).size; ++j) {
-                        _board.del( _groupedSquares.get(i).get(j).x,
-                                 _groupedSquares.get(i).get(j).y);
+                        _board.del(_groupedSquares.get(i).get(j).x,
+                                _groupedSquares.get(i).get(j).y);
                     }
                 }
 
@@ -854,10 +854,11 @@ public class StateGame extends State {
             } else if (_hintButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 showHint();
                 // Penalty
-                // decrease time - time/60 * penalty (1,2,3)
                 // decrease point - time
-                System.out.println("### " + _remainingTime / 10 + " ###");
-                _remainingTime -= _remainingTime / 10;
+                //System.out.println("### " + _remainingTime / 10 + " ###");
+                if (_remainingTime - _remainingTime / 10 > 0) {
+                    _remainingTime -= _remainingTime / 10;
+                }
                 if (_points > _remainingTime) {
                     _points -= _remainingTime;
                 } else {
@@ -990,7 +991,7 @@ public class StateGame extends State {
             int matchSize = match.size;
             _floatingScores.add(new FloatingScore(_parent,
                     _fontFloatScore,
-                    matchSize * (5 * (int)_penaltyTime),
+                    matchSize * (5 * _penaltyTime),
                     gemsInitial.x + match.getMidSquare().x * 76 + 5,
                     gemsInitial.y + match.getMidSquare().y * 76 + 5));
 
@@ -1006,14 +1007,21 @@ public class StateGame extends State {
             _remainingTime += matchSize;
             if (_points >= 500) {
                 _penaltyTime = 2;
-            } else if (_points >= 1000) {
+            }
+            if (_points >= 1500) {
                 _penaltyTime = 3;
-            } else if (_points >= 1500) {
+            }
+            if (_points >= 2500) {
                 _penaltyTime = 4;
             }
             _points += matchSize * (5 * _penaltyTime);
         }
-        _remainingTime += _multiplier - _penaltyTime;
+        //System.out.println("### T1: " + (_remainingTime) + " ###");
+        if (_remainingTime + _multiplier - _penaltyTime > 0) {
+            _remainingTime += _multiplier - _penaltyTime;
+        }
+        //System.out.println("### PT: " + _penaltyTime + " ###");
+        //System.out.println("### T2: " + (_remainingTime + _multiplier - _penaltyTime) + " ###");
     }
 
     /*  TODO: Fix gameplay bug!
