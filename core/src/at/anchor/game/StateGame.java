@@ -856,7 +856,8 @@ public class StateGame extends State {
                 // Penalty
                 // decrease time - time/60 * penalty (1,2,3)
                 // decrease point - time
-                _remainingTime -= _remainingTime / 60 * _penaltyTime;
+                System.out.println("### " + _remainingTime / 10 + " ###");
+                _remainingTime -= _remainingTime / 10;
                 if (_points > _remainingTime) {
                     _points -= _remainingTime;
                 } else {
@@ -989,7 +990,7 @@ public class StateGame extends State {
             int matchSize = match.size;
             _floatingScores.add(new FloatingScore(_parent,
                     _fontFloatScore,
-                    matchSize * 5 * _multiplier,
+                    matchSize * (5 * (int)_penaltyTime),
                     gemsInitial.x + match.getMidSquare().x * 76 + 5,
                     gemsInitial.y + match.getMidSquare().y * 76 + 5));
 
@@ -1002,19 +1003,17 @@ public class StateGame extends State {
             }
 
             // Difficulties
-            // System.out.println("### Time      : " + _remainingTime + " ###\n");
-            _remainingTime += _multiplier + (matchSize -2);
-            // System.out.println("### matchSize : " + matchSize + " ###\n");
-            // System.out.println("### multiplier: " + _multiplier + " ###\n");
-            // System.out.println("### Time now  : " + _remainingTime + " ###\n");
-            _remainingTime -= _penaltyTime;
-            _points += matchSize * 5 * _penaltyTime;
-            if (_points >= 1500) {
+            _remainingTime += matchSize;
+            if (_points >= 500) {
                 _penaltyTime = 2;
-            } else if (_points >= 3000) {
+            } else if (_points >= 1000) {
                 _penaltyTime = 3;
+            } else if (_points >= 1500) {
+                _penaltyTime = 4;
             }
+            _points += matchSize * (5 * _penaltyTime);
         }
+        _remainingTime += _multiplier - _penaltyTime;
     }
 
     /*  TODO: Fix gameplay bug!
