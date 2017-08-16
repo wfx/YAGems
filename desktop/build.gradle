@@ -1,6 +1,5 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "at.anchor.game.desktop.DesktopLauncher"
