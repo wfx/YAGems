@@ -764,15 +764,14 @@ public class StateGame extends State {
                     img = null;
                 }
 
-                // If the mouse is over a gem
-                if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
+                // If the mouse is over a gem AND state is wait
+                if (overGem((int) _mousePos.x, (int) _mousePos.y) && _state == State.Wait) {
                     // Draw the selector over that gem
                     Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
                     batch.draw(_imgSelector,
                             (int) gemsInitial.x + coord.x * 76,
                             (int) gemsInitial.y + coord.y * 76);
                 }
-
 
                 // If a gem was previously clicked
                 if (_state == State.SelectedGem) {
@@ -1024,9 +1023,6 @@ public class StateGame extends State {
         //System.out.println("### T2: " + (_remainingTime + _multiplier - _penaltyTime) + " ###");
     }
 
-    /*  TODO: Fix gameplay bug!
-        If the player fast enough then the game removes the wrong gems. Why?
-    */
     private boolean checkClickedSquare(int mX, int mY) {
         _selectedSquareSecond = getCoord(mX, mY);
 
