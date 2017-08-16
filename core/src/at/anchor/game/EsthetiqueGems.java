@@ -80,12 +80,12 @@ public class EsthetiqueGems extends ApplicationAdapter {
 		_mousePos = new Vector3();
 
         // Load general assets
-        _assetManager.load("img/handCursor.png", Texture.class);
+        _assetManager.load("img/pointer.png", Texture.class);
         _assetManager.load("i18n/stateLoad", I18NBundle.class);
 		_assetManager.finishLoading();
 
         // Get general assets
-		_imgMouse = new TextureRegion(_assetManager.get("img/handCursor.png", Texture.class));
+		_imgMouse = new TextureRegion(_assetManager.get("img/pointer.png", Texture.class));
 		_imgMouse.flip(false, true);
 
         // Mouse hidden
