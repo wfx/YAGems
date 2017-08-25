@@ -49,6 +49,7 @@ public class EsthetiqueGems extends ApplicationAdapter {
 	public BitmapFont _fontSplashLoad = null;
     public BitmapFont _fontH1 = null;
     public BitmapFont _fontP = null;
+	public BitmapFont _fontPHighlight =null;
 
     // Mouse pointer
 	private TextureRegion _imgMouse = null;
@@ -74,6 +75,7 @@ public class EsthetiqueGems extends ApplicationAdapter {
 		_fontSplashLoad = new BitmapFont();
         _fontH1 = new BitmapFont();
         _fontP = new BitmapFont();
+		_fontPHighlight = new BitmapFont();
         initFont();
 
         // Mouse pos
@@ -287,6 +289,21 @@ public class EsthetiqueGems extends ApplicationAdapter {
         _fontP = fontGenerator.generateFont(fontParameter);
         _fontP.setUseIntegerPositions(false);
         fontGenerator.dispose();
+
+		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/CaviarDreamsBold.ttf"));
+		fontParameter = new FreeTypeFontParameter();
+
+		fontParameter.size = 32;
+		fontParameter.genMipMaps = true;
+		fontParameter.magFilter = Texture.TextureFilter.Linear;
+		fontParameter.minFilter = Texture.TextureFilter.Linear;
+		fontParameter.color = new Color(1f, 0.8f, 0f, 1f);
+		fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
+		fontParameter.shadowOffsetY = 3;
+		fontParameter.flip = true;
+		_fontPHighlight = fontGenerator.generateFont(fontParameter);
+		_fontPHighlight.setUseIntegerPositions(false);
+		fontGenerator.dispose();
 
     }
 }

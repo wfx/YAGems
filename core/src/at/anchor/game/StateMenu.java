@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.Arrays;
+
 
 public class StateMenu extends State {
 
@@ -34,7 +36,9 @@ public class StateMenu extends State {
     SplashLoad _loading;
 
     //  Preferences
-    private Preferences _prefScore;
+    // private Preferences _prefScore;
+    Preferences _prefHighScore;
+
 
     GlyphLayout _layout;
 
@@ -115,13 +119,25 @@ public class StateMenu extends State {
         assetManager.load("img/btnCredits.png", Texture.class);
         assetManager.load("img/btnCreditsClicked.png", Texture.class);
         assetManager.load("audio/select.ogg", Sound.class);
+
+        // BACKUP OLD HIGSCORE!
+        /*
+        String oldScore = _prefScore.getString("oldScore", "Save Me!");
+        if (oldScore.equals("Save Me!")) {
+            String oldPlayerName = _prefScore.getString("name", ".....");
+            Integer oldPlayerScore = _prefScore.getInteger("score", 0);
+            _highScore[MAX_ENTRIES -1] = new Score(oldPlayerName, oldPlayerScore);
+            Arrays.sort(_highScore);
+        }
+        */
+
     }
 
     @Override
     public void unload() {
 
         // Set references to null
-        _prefScore = null;
+        _prefHighScore = null;
         _imgBackground = null;
         _playButton.setNull();
         _howtoButton.setNull();
@@ -208,11 +224,11 @@ public class StateMenu extends State {
         _selectSFX = assetManager.get("audio/select.ogg", Sound.class);
 
         //  Load score preferences
-        _prefScore = Gdx.app.getPreferences("score");
+        _prefHighScore = Gdx.app.getPreferences("highscore");
 
         _txtTopScoreTitle = _lang.get("Menu_TopScoreTitle");
-        _txtPlayerName = _prefScore.getString("name", _lang.get("Menu_MissingName"));
-        _txtPlayerScore = Integer.toString(_prefScore.getInteger("score", 0));
+        _txtPlayerName = _prefHighScore.getString("firstName", _lang.get("Menu_MissingName"));
+        _txtPlayerScore = Integer.toString(_prefHighScore.getInteger("firstScore", 0));
 
         _layout.setText(_parent._fontH1, _txtTopScoreTitle);
         _txtTopScoreTitlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 560);
