@@ -80,10 +80,10 @@ public class ScoreTable implements Input.TextInputListener {
             // Render table
             for (int i = 0; i < MAX_ENTRIES -1; i++) {
                 if (i == _topScorePos) {
-                    _game._fontPHighlight.draw(batch, _highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
-                    _game._fontPHighlight.draw(batch, Integer.toString(_highScore[i].getScore()), (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
+                    _game._fontPBold.draw(batch, (i+1) + ".  " + _highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
+                    _game._fontPBold.draw(batch, Integer.toString(_highScore[i].getScore()), (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
                 } else {
-                    _game._fontP.draw(batch, _highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
+                    _game._fontP.draw(batch, (i+1) + ".  " +_highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
                     _game._fontP.draw(batch, Integer.toString(_highScore[i].getScore()), (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
                 }
             }
