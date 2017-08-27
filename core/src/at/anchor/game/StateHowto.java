@@ -103,7 +103,7 @@ public class StateHowto extends State {
         // Set positions now that we now about sizes
         _layout.setText(_parent._fontH1, _textH1);
         _posH1 = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 272);
-        _posP = new Vector2(52, 632);
+        _posP = new Vector2(52, 552);
 
         Gdx.input.setInputProcessor(this);
     }
