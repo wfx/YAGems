@@ -272,7 +272,7 @@ public class EsthetiqueGems extends ApplicationAdapter {
         _fontH1.setUseIntegerPositions(false);
         fontGenerator.dispose();
 
-        fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/CaviarDreams.ttf"));
+        fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/CaviarDreamsBold.ttf"));
         fontParameter = new FreeTypeFontParameter();
 
         fontParameter.size = 32;
@@ -285,21 +285,6 @@ public class EsthetiqueGems extends ApplicationAdapter {
         fontParameter.flip = true;
         _fontP = fontGenerator.generateFont(fontParameter);
         _fontP.setUseIntegerPositions(false);
-        fontGenerator.dispose();
-
-        fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/CaviarDreamsBold.ttf"));
-        fontParameter = new FreeTypeFontParameter();
-
-        fontParameter.size = 32;
-        fontParameter.genMipMaps = true;
-        fontParameter.magFilter = Texture.TextureFilter.Linear;
-        fontParameter.minFilter = Texture.TextureFilter.Linear;
-        fontParameter.color = new Color(0f, 0.0f, 0f, 1f);
-        fontParameter.shadowColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
-        fontParameter.shadowOffsetY = 3;
-        fontParameter.flip = true;
-        _fontPBold = fontGenerator.generateFont(fontParameter);
-        _fontPBold.setUseIntegerPositions(false);
         fontGenerator.dispose();
 
     }
