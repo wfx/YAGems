@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.I18NBundle;
+
 import java.util.Arrays;
 
 public class ScoreTable implements Input.TextInputListener {
@@ -59,9 +60,9 @@ public class ScoreTable implements Input.TextInputListener {
 
         // Positions
         _layout.setText(_game._fontH1, _titleText);
-        _titlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 652);
+        _titlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 682);
         _layout.setText(_game._fontP, _titleText);
-        _firstScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width - 132) / 2, 752);
+        _firstScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width - 162) / 2, 782);
 
         // Check scores (new entry...)
         loadScore();
@@ -78,12 +79,11 @@ public class ScoreTable implements Input.TextInputListener {
             _game._fontH1.draw(batch, _titleText, (int) _titlePos.x, (int) _titlePos.y);
 
             // Render table
-            for (int i = 0; i < MAX_ENTRIES -1; i++) {
+            for (int i = 0; i < MAX_ENTRIES - 1; i++) {
+                _game._fontP.draw(batch, (i + 1) + ".  " + _highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
                 if (i == _topScorePos) {
-                    _game._fontPBold.draw(batch, (i+1) + ".  " + _highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
-                    _game._fontPBold.draw(batch, Integer.toString(_highScore[i].getScore()), (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
+                    _game._fontP.draw(batch, Integer.toString(_highScore[i].getScore()) + " !", (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
                 } else {
-                    _game._fontP.draw(batch, (i+1) + ".  " +_highScore[i].getName(), (int) _firstScorePos.x + 1, (int) _firstScorePos.y + (i * 42));
                     _game._fontP.draw(batch, Integer.toString(_highScore[i].getScore()), (int) _firstScorePos.x + 300, (int) _firstScorePos.y + (i * 42));
                 }
             }
@@ -94,7 +94,7 @@ public class ScoreTable implements Input.TextInputListener {
         _topScorePos = -1;
         for (int i = 0; i < MAX_ENTRIES; i++) {
 
-            System.out.println("### checkScore: #" + i + "; " + _points + "; " +_highScore[i].toString());
+            System.out.println("### checkScore: #" + i + "; " + _points + "; " + _highScore[i].toString());
 
             if (_points > _highScore[i].getScore()) {
                 _topScorePos = i;
@@ -105,10 +105,10 @@ public class ScoreTable implements Input.TextInputListener {
             }
         }
 
-        if (_topScorePos != -1) {
-            _highScore[MAX_ENTRIES -1].setScore(_points);
+        if (_topScorePos != -1 && _topScorePos != 5) {
+            _highScore[MAX_ENTRIES - 1].setScore(_points);
             String lastName = _prefConfig.getString("lastName", _lang.get("ScoreTable_MissingName"));
-            Gdx.input.getTextInput(this, _lang.get("ScoreTable_EnterName"), lastName, "");
+            Gdx.input.getTextInput(this, "# " + (_topScorePos + 1) + ". " + _lang.get("ScoreTable_EnterName"), lastName, "");
         }
     }
 
@@ -135,7 +135,7 @@ public class ScoreTable implements Input.TextInputListener {
         for (int i = 0; i < MAX_ENTRIES; i++) {
             topNames = topNames + _highScore[i].getName();
             topScores = topScores + Integer.toString(_highScore[i].getScore());
-            if (i != MAX_ENTRIES -1) {
+            if (i != MAX_ENTRIES - 1) {
                 topNames = topNames + DEFAULT_SEPARATOR;
                 topScores = topScores + DEFAULT_SEPARATOR;
             }
@@ -175,7 +175,7 @@ public class ScoreTable implements Input.TextInputListener {
         // Replace any used default seperator char with blank
         text = text.replace(DEFAULT_SEPARATOR, ' ');
 
-        _highScore[MAX_ENTRIES -1].setName(text);
+        _highScore[MAX_ENTRIES - 1].setName(text);
         saveScore();
 
         System.out.println("### Player name: " + text);
