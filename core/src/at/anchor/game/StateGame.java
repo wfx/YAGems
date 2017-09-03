@@ -907,39 +907,44 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         _parent.getCamera().unproject(_mousePos);
 
         if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
-            _state = State.SelectedGem;
-            Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
-            _selectedSquareFirst.x = coord.x;
-            _selectedSquareFirst.y = coord.y;
-
-            if (Math.abs(velocityX) > Math.abs(velocityY)) {
-                if (velocityX > 0) {
-                    // right 2 left < < < <
-                    if (!checkClickedSquare(_selectedSquareFirst.x - 1, _selectedSquareFirst.y)) {
-                        _selectedSquareFirst.x = -1;
-                        _selectedSquareFirst.y = -1;
+            if (_state == State.Wait) {
+                _state = State.SelectedGem;
+                Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
+                _selectedSquareFirst.x = coord.x;
+                _selectedSquareFirst.y = coord.y;
+                if (Math.abs(velocityX) > Math.abs(velocityY)) {
+                    if (velocityX > 0) {
+                        // right 2 left < < < <
+                        if (!checkClickedSquare(_selectedSquareFirst.x - 1, _selectedSquareFirst.y)) {
+                            _selectedSquareFirst.x = -1;
+                            _selectedSquareFirst.y = -1;
+                            _state = State.Wait;
+                        }
+                    } else if (velocityX < 0) {
+                        // left 2 right > > > >
+                        if (!checkClickedSquare(_selectedSquareFirst.x + 1, _selectedSquareFirst.y)) {
+                            _selectedSquareFirst.x = -1;
+                            _selectedSquareFirst.y = -1;
+                            _state = State.Wait;
+                        }
                     }
-                } else if (velocityX < 0) {
-                    // left 2 right > > > >
-                    if (!checkClickedSquare(_selectedSquareFirst.x + 1, _selectedSquareFirst.y)) {
-                        _selectedSquareFirst.x = -1;
-                        _selectedSquareFirst.y = -1;
-                    }
-                }
-            } else {
-                if (velocityY > 0) {
-                    // top 2 bottom v v v v
-                    --_selectedSquareFirst.y;
-                    if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y + 1)) {
-                        _selectedSquareFirst.x = -1;
-                        _selectedSquareFirst.y = -1;
-                    }
-                } else if (velocityY < 0) {
-                    // "bottom 2 top ^ ^ ^ ^"
-                    ++_selectedSquareFirst.y;
-                    if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
-                        _selectedSquareFirst.x = -1;
-                        _selectedSquareFirst.y = -1;
+                } else {
+                    if (velocityY > 0) {
+                        // top 2 bottom v v v v
+                        --_selectedSquareFirst.y;
+                        if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y + 1)) {
+                            _selectedSquareFirst.x = -1;
+                            _selectedSquareFirst.y = -1;
+                            _state = State.Wait;
+                        }
+                    } else if (velocityY < 0) {
+                        // "bottom 2 top ^ ^ ^ ^"
+                        ++_selectedSquareFirst.y;
+                        if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
+                            _selectedSquareFirst.x = -1;
+                            _selectedSquareFirst.y = -1;
+                            _state = State.Wait;
+                        }
                     }
                 }
             }
