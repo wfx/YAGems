@@ -14,13 +14,14 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
 
-public class StateGame extends State {
+public class StateGame extends State implements GestureDetector.GestureListener {
 
     public enum State {
         Loading,
@@ -127,6 +128,8 @@ public class StateGame extends State {
     private Color _imgColor = Color.WHITE.cpy();
     private Coord _coord = new Coord();
 
+    private GestureDetector gestureDetector;
+
     public StateGame(EsthetiqueGems esthetiqueGems) {
         super(esthetiqueGems);
 
@@ -162,7 +165,10 @@ public class StateGame extends State {
         _effectPool = new ParticleEffectPool(_effect, 20, 100);
         _effects = new Array<ParticleEffectPool.PooledEffect>();
 
+        // Gdx.input.setInputProcessor(this);
+
         // Init game for the first time
+
         init();
     }
 
@@ -370,7 +376,11 @@ public class StateGame extends State {
         _fallSFX = assetManager.get("audio/fall.ogg", Sound.class);
         _song = assetManager.get("audio/music1.ogg", Music.class);
 
-        Gdx.input.setInputProcessor(this);
+        //Gdx.input.setInputProcessor(this);
+
+        gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, this);
+        Gdx.input.setInputProcessor(gestureDetector);
+
     }
 
     @Override
@@ -620,8 +630,6 @@ public class StateGame extends State {
     public void render() {
         SpriteBatch batch = _parent.getSpriteBatch();
 
-        // batch.totalRenderCalls = 0;
-
         // STATE LOADING - Just render loading
         if (_state == State.Loading) {
             _loading.draw();
@@ -763,31 +771,10 @@ public class StateGame extends State {
 
                     img = null;
                 }
-
-                // If the mouse is over a gem AND state is wait
-                if (overGem((int) _mousePos.x, (int) _mousePos.y) && _state == State.Wait) {
-                    // Draw the selector over that gem
-                    Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
-                    batch.draw(_imgSelector,
-                            (int) gemsInitial.x + coord.x * 76,
-                            (int) gemsInitial.y + coord.y * 76);
-                }
-
-                // If a gem was previously clicked
-                if (_state == State.SelectedGem) {
-                    // Draw the tinted selector over it
-                    batch.setColor(1.0f, 0.0f, 1.0f, 1.0f);
-                    batch.draw(_imgSelector,
-                            (int) gemsInitial.x + _selectedSquareFirst.x * 76,
-                            (int) gemsInitial.y + _selectedSquareFirst.y * 76);
-                    batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-                }
             }
 
             // If a hint is being shown
             if (_showingHint > 0.0) {
-                // Get the opacity percentage
-                //float p = (float) (_showingHint / _animHintTotalTime);
 
                 float x = gemsInitial.x + _coordHint.x * 76;
                 float y = gemsInitial.y + _coordHint.y * 76;
@@ -822,8 +809,6 @@ public class StateGame extends State {
             _effects.get(i).draw(batch);
         }
 
-        //  int calls = batch.totalRenderCalls;
-        // System.out.print("### " + Integer.toString(calls) + " ###");
     }
 
     @Override
@@ -835,16 +820,32 @@ public class StateGame extends State {
         return false;
     }
 
+
     @Override
     public boolean keyUp(int arg0) {
         return false;
     }
 
+
     @Override
-    public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-        if (arg3 == 0) { // Left mouse button clicked
-            _mousePos.x = arg0;
-            _mousePos.y = arg1;
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // Todo use lib gdx button!
+        /*
+        _hintButton.touchUp();
+        _musicButton.touchUp();
+        _exitButton.touchUp();
+        _resetButton.touchUp();
+        //_pauseButton.touchUp();
+        */
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(float x, float y, int pointer, int button) {
+
+        if (button == 0) { // Left mouse button clicked
+            _mousePos.x = x;
+            _mousePos.y = y;
             _parent.getCamera().unproject(_mousePos);
 
             // Button
@@ -853,8 +854,6 @@ public class StateGame extends State {
             } else if (_hintButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 showHint();
                 // Penalty
-                // decrease point - time
-                //System.out.println("### " + _remainingTime / 10 + " ###");
                 if (_remainingTime - _remainingTime / 10 > 0) {
                     _remainingTime -= _remainingTime / 10;
                 }
@@ -874,63 +873,106 @@ public class StateGame extends State {
                     _song.play();
                     _musicButton.setModeOn(true);
                 }
+                _musicButton.touchUp();
             } else if (_resetButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 _state = State.DisappearingBoard;
                 gemsOutScreen();
                 resetGame();
+                _resetButton.touchUp();
             } /* else if (_pauseButton.isClicked((int) _mousePos.x, (int) _mousePos.y)) {
                 if (_state == State.Wait) {
                     // PAUSE
                 } else {
                     // RESUME
                 }
-            } */ else if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
-                _selectSFX.play();
+            } */
+        }
 
-                if (_state == State.Wait) { // No gems marked
-                    _state = State.SelectedGem;
-                    Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
-                    _selectedSquareFirst.x = coord.x;
-                    _selectedSquareFirst.y = coord.y;
-                } else if (_state == State.SelectedGem) { // It is a marked gems
-                    if (!checkClickedSquare((int) _mousePos.x, (int) _mousePos.y)) {
+        return true;
+    }
+
+    @Override
+    public boolean tap(float x, float y, int count, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean longPress(float x, float y) {
+        return false;
+    }
+
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button) {
+        _mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        _parent.getCamera().unproject(_mousePos);
+
+        if (overGem((int) _mousePos.x, (int) _mousePos.y)) {
+            _state = State.SelectedGem;
+            Coord coord = getCoord((int) _mousePos.x, (int) _mousePos.y);
+            _selectedSquareFirst.x = coord.x;
+            _selectedSquareFirst.y = coord.y;
+
+            if (Math.abs(velocityX) > Math.abs(velocityY)) {
+                if (velocityX > 0) {
+                    // right 2 left < < < <
+                    if (!checkClickedSquare(_selectedSquareFirst.x - 1, _selectedSquareFirst.y)) {
                         _selectedSquareFirst.x = -1;
                         _selectedSquareFirst.y = -1;
-                        _state = State.Wait;
+                    }
+                } else if (velocityX < 0) {
+                    // left 2 right > > > >
+                    if (!checkClickedSquare(_selectedSquareFirst.x + 1, _selectedSquareFirst.y)) {
+                        _selectedSquareFirst.x = -1;
+                        _selectedSquareFirst.y = -1;
+                    }
+                }
+            } else {
+                if (velocityY > 0) {
+                    // top 2 bottom v v v v
+                    --_selectedSquareFirst.y;
+                    if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y + 1)) {
+                        _selectedSquareFirst.x = -1;
+                        _selectedSquareFirst.y = -1;
+                    }
+                } else if (velocityY < 0) {
+                    // "bottom 2 top ^ ^ ^ ^"
+                    ++_selectedSquareFirst.y;
+                    if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
+                        _selectedSquareFirst.x = -1;
+                        _selectedSquareFirst.y = -1;
                     }
                 }
             }
         }
 
-        //System.out.println("###" + _state.name() + "###");
         return false;
     }
 
     @Override
-    public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-        if (arg3 == 0) { // Left mouse button clicked
-            _mousePos.x = arg0;
-            _mousePos.y = arg1;
-            _parent.getCamera().unproject(_mousePos);
-
-            if (_state == State.SelectedGem) {
-
-                Coord res = getCoord((int) _mousePos.x, (int) _mousePos.y);
-
-                if (!(res == _selectedSquareFirst)) {
-                    checkClickedSquare((int) _mousePos.x, (int) _mousePos.y);
-                }
-            }
-
-            _hintButton.touchUp();
-            _musicButton.touchUp();
-            _exitButton.touchUp();
-            _resetButton.touchUp();
-            //_pauseButton.touchUp();
-        }
-
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
         return false;
     }
+
+    @Override
+    public boolean panStop(float x, float y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
+        return false;
+    }
+
+    @Override
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+        return false;
+    }
+
+    @Override
+    public void pinchStop() {
+
+    }
+
 
     private void gemsOutScreen() {
         for (int x = 0; x < 8; ++x) {
@@ -1024,7 +1066,8 @@ public class StateGame extends State {
     }
 
     private boolean checkClickedSquare(int mX, int mY) {
-        _selectedSquareSecond = getCoord(mX, mY);
+        _selectedSquareSecond.x = mX;
+        _selectedSquareSecond.y = mY;
 
         // If gem is neighbour
         if (Math.abs(_selectedSquareFirst.x - _selectedSquareSecond.x)
@@ -1038,6 +1081,8 @@ public class StateGame extends State {
             // If winning movement
             if (_groupedSquares.size != 0) {
                 _state = State.ChangingGems;
+
+                _selectSFX.play();
 
                 _board.swap(_selectedSquareFirst.x, _selectedSquareFirst.y,
                         _selectedSquareSecond.x, _selectedSquareSecond.y);
@@ -1055,6 +1100,8 @@ public class StateGame extends State {
         Array<Coord> solutions = _board.solutions();
         _coordHint = solutions.get(0);
         _showingHint = _animHintTotalTime;
+
+        _hintButton.touchUp();
     }
 
     private void playMatchSound() {
