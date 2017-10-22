@@ -39,9 +39,6 @@ public class StateGame extends State implements GestureDetector.GestureListener 
     //  Current game state
     private State _state;
 
-    //  i18n
-    //private I18NBundle _lang;
-
     //  Loading feedback
     SplashLoad _loading;
 
@@ -69,7 +66,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
     private TextureRegion _imgGreen;
     private TextureRegion _imgYellow;
     private TextureRegion _imgBlue;
-    private TextureRegion _imgSelector;
+    //private TextureRegion _imgSelector;
     private TextureRegion _imgHint;
 
     // SFX and music
@@ -80,7 +77,8 @@ public class StateGame extends State implements GestureDetector.GestureListener 
     private Sound _fallSFX;
     private Music _song;
 
-    private static final Vector2 gemsInitial = new Vector2(56, 622);
+    // TODO: the same for buttons etc.
+    private static final Vector2 gemsInitial = new Vector2(56, 560);
 
     // Selected squares
     private Coord _selectedSquareFirst;
@@ -110,7 +108,6 @@ public class StateGame extends State implements GestureDetector.GestureListener 
     private int _penaltyTime;
 
     // Floating scores
-    // TODO: Top 5
     private Array<FloatingScore> _floatingScores;
 
     // Particle effects
@@ -136,11 +133,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         // Initial state
         _state = State.Loading;
 
-        //_lang = new I18NBundle();
-
         _loading = new SplashLoad(_parent, "Loading_Game");
-
-        // Creare board
 
         // Resources are initially null
         _imgBackground = null;
@@ -161,21 +154,18 @@ public class StateGame extends State implements GestureDetector.GestureListener 
 
         // Particle effects
         _effect = new ParticleEffect();
-        _effect.load(Gdx.files.internal("data/particleStars"), Gdx.files.internal("img"));
+        _effect.load(Gdx.files.internal("data/particleStars"), _parent.getAtlasParticle());
         _effectPool = new ParticleEffectPool(_effect, 20, 100);
         _effects = new Array<ParticleEffectPool.PooledEffect>();
 
-        // Gdx.input.setInputProcessor(this);
-
         // Init game for the first time
-
         init();
     }
 
     @Override
     public void load() {
         // LCD Font are only here in use.
-        // TODO: Not the a clean way to assigning the font resource at loading?
+        // TODO: Clean out; clean way to assigning the font resource at loading?
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/lcd.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
@@ -196,29 +186,9 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         fontGenerator.dispose();
 
         AssetManager assetManager = _parent.getAssetManager();
-        //assetManager.load("i18n/stateGame", I18NBundle.class);
         assetManager.load("i18n/stateScoreTable", I18NBundle.class);
         assetManager.load("img/stateGameBg.png", Texture.class);
         assetManager.load("img/stateGameScoreTableBg.png", Texture.class);
-        assetManager.load("img/selector.png", Texture.class);
-        assetManager.load("img/hint.png", Texture.class);
-        assetManager.load("img/gemWhite.png", Texture.class);
-        assetManager.load("img/gemRed.png", Texture.class);
-        assetManager.load("img/gemPurple.png", Texture.class);
-        assetManager.load("img/gemOrange.png", Texture.class);
-        assetManager.load("img/gemGreen.png", Texture.class);
-        assetManager.load("img/gemYellow.png", Texture.class);
-        assetManager.load("img/gemBlue.png", Texture.class);
-        assetManager.load("img/btnExit.png", Texture.class);
-        assetManager.load("img/btnExitClicked.png", Texture.class);
-        assetManager.load("img/btnRestart.png", Texture.class);
-        assetManager.load("img/btnRestartClicked.png", Texture.class);
-        assetManager.load("img/btnMusicOn.png", Texture.class);
-        assetManager.load("img/btnMusicOnClicked.png", Texture.class);
-        assetManager.load("img/btnMusicOff.png", Texture.class);
-        assetManager.load("img/btnMusicOffClicked.png", Texture.class);
-        assetManager.load("img/btnHint.png", Texture.class);
-        assetManager.load("img/btnHintClicked.png", Texture.class);
         assetManager.load("audio/match1.ogg", Sound.class);
         assetManager.load("audio/match2.ogg", Sound.class);
         assetManager.load("audio/match3.ogg", Sound.class);
@@ -226,7 +196,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         assetManager.load("audio/fall.ogg", Sound.class);
         assetManager.load("audio/music1.ogg", Music.class);
 
-        // TODO: Same as LCD font. Reste game parameters at loading?
+        // TODO: Reset game parameters at loading?
         resetGame();
     }
 
@@ -248,7 +218,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         _imgGreen = null;
         _imgYellow = null;
         _imgBlue = null;
-        _imgSelector = null;
+        //_imgSelector = null;
         _match1SFX = null;
         _match2SFX = null;
         _match3SFX = null;
@@ -256,31 +226,14 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         _fallSFX = null;
         _song = null;
         //_lang = null;
+        _fontLCD.dispose();
+        _fontFloatScore.dispose();
 
         // Unload assets
         AssetManager assetManager = _parent.getAssetManager();
-        //assetManager.unload("i18n/stateGame");
         assetManager.unload("i18n/stateScoreTable");
         assetManager.unload("img/stateGameBg.png");
         assetManager.unload("img/stateGameScoreTableBg.png");
-        assetManager.unload("img/selector.png");
-        assetManager.unload("img/gemWhite.png");
-        assetManager.unload("img/gemRed.png");
-        assetManager.unload("img/gemPurple.png");
-        assetManager.unload("img/gemOrange.png");
-        assetManager.unload("img/gemGreen.png");
-        assetManager.unload("img/gemYellow.png");
-        assetManager.unload("img/gemBlue.png");
-        assetManager.unload("img/btnExit.png");
-        assetManager.unload("img/btnExitClicked.png");
-        assetManager.unload("img/btnRestart.png");
-        assetManager.unload("img/btnRestartClicked.png");
-        assetManager.unload("img/btnMusicOn.png");
-        assetManager.unload("img/btnMusicOnClicked.png");
-        assetManager.unload("img/btnMusicOff.png");
-        assetManager.unload("img/btnMusicOffClicked.png");
-        assetManager.unload("img/btnHint.png");
-        assetManager.unload("img/btnHintClicked.png");
         assetManager.unload("audio/match1.ogg");
         assetManager.unload("audio/match2.ogg");
         assetManager.unload("audio/match3.ogg");
@@ -296,45 +249,23 @@ public class StateGame extends State implements GestureDetector.GestureListener 
 
         AssetManager assetManager = _parent.getAssetManager();
 
-        //_lang = assetManager.get("i18n/stateGame", I18NBundle.class);
+        // Button EXIT
+        _exitButton = new Button(_parent, 56, 330);
+        _exitButton.setNormal(_parent.getAtlasButtons().findRegion("btnExit"), _parent.getAtlasButtons().findRegion("btnExitClicked"));
 
-        // Button Exit
-        TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
-        TextureRegion btnExitClicked = new TextureRegion(assetManager.get("img/btnExitClicked.png", Texture.class));
-        btnExit.flip(false, true);
-        btnExitClicked.flip(false, true);
-        _exitButton = new Button(_parent, 56, 394);
-        _exitButton.setNormal(btnExit, btnExitClicked);
-
-        // Button Restart
-        TextureRegion btnRestart = new TextureRegion(assetManager.get("img/btnRestart.png", Texture.class));
-        TextureRegion btnRestartClicked = new TextureRegion(assetManager.get("img/btnRestartClicked.png", Texture.class));
-        btnRestart.flip(false, true);
-        btnRestartClicked.flip(false, true);
-        _resetButton = new Button(_parent, 186, 394);
-        _resetButton.setNormal(btnRestart, btnRestartClicked);
+        // Button Reset/Restart
+        _resetButton = new Button(_parent, 186, 330);
+        _resetButton.setNormal(_parent.getAtlasButtons().findRegion("btnRestart"), _parent.getAtlasButtons().findRegion("btnRestartClicked"));
 
         // Button Music On/Off
-        TextureRegion btnMusicOn = new TextureRegion(assetManager.get("img/btnMusicOn.png", Texture.class));
-        TextureRegion btnMusicOnClicked = new TextureRegion(assetManager.get("img/btnMusicOnClicked.png", Texture.class));
-        btnMusicOn.flip(false, true);
-        btnMusicOnClicked.flip(false, true);
-        TextureRegion btnMusicOff = new TextureRegion(assetManager.get("img/btnMusicOff.png", Texture.class));
-        TextureRegion btnMusicOffClicked = new TextureRegion(assetManager.get("img/btnMusicOffClicked.png", Texture.class));
-        btnMusicOff.flip(false, true);
-        btnMusicOffClicked.flip(false, true);
-        _musicButton = new Button(_parent, 316, 394);
-        _musicButton.setNormal(btnMusicOff, btnMusicOffClicked);
-        _musicButton.setSwitch(btnMusicOn, btnMusicOnClicked);
+        _musicButton = new Button(_parent, 316, 330);
+        _musicButton.setNormal(_parent.getAtlasButtons().findRegion("btnMusicOff"), _parent.getAtlasButtons().findRegion("btnMusicOffClicked"));
+        _musicButton.setSwitch(_parent.getAtlasButtons().findRegion("btnMusicOn"), _parent.getAtlasButtons().findRegion("btnMusicOnClicked"));
         _musicButton.setModeOn(false);
 
         // Button Hint
-        TextureRegion btnHint = new TextureRegion(assetManager.get("img/btnHint.png", Texture.class));
-        TextureRegion btnHintClicked = new TextureRegion(assetManager.get("img/btnHintClicked.png", Texture.class));
-        btnHint.flip(false, true);
-        btnHintClicked.flip(false, true);
-        _hintButton = new Button(_parent, 576, 394);
-        _hintButton.setNormal(btnHint, btnHintClicked);
+        _hintButton = new Button(_parent, 576, 330);
+        _hintButton.setNormal(_parent.getAtlasButtons().findRegion("btnHint"), _parent.getAtlasButtons().findRegion("btnHintClicked"));
 
         _imgBackground = new TextureRegion(assetManager.get("img/stateGameBg.png", Texture.class));
         _imgBackground.flip(false, true);
@@ -342,31 +273,28 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         _imgBackgroundScoreTable = new TextureRegion(assetManager.get("img/stateGameScoreTableBg.png", Texture.class));
         _imgBackgroundScoreTable.flip(false, true);
 
-        _imgSelector = new TextureRegion(assetManager.get("img/selector.png", Texture.class));
-        _imgSelector.flip(false, true);
-
-        _imgHint = new TextureRegion(assetManager.get("img/hint.png", Texture.class));
+        _imgHint = new TextureRegion(_parent.getAtlasUI().findRegion("hint"));
         // flipping make no sense
 
-        _imgWhite = new TextureRegion(assetManager.get("img/gemWhite.png", Texture.class));
+        _imgWhite = new TextureRegion(_parent.getAtlasGems().findRegion("gemWhite"));
         _imgWhite.flip(false, true);
 
-        _imgRed = new TextureRegion(assetManager.get("img/gemRed.png", Texture.class));
+        _imgRed = new TextureRegion(_parent.getAtlasGems().findRegion("gemRed"));
         _imgRed.flip(false, true);
 
-        _imgPurple = new TextureRegion(assetManager.get("img/gemPurple.png", Texture.class));
+        _imgPurple = new TextureRegion(_parent.getAtlasGems().findRegion("gemPurple"));
         _imgPurple.flip(false, true);
 
-        _imgOrange = new TextureRegion(assetManager.get("img/gemOrange.png", Texture.class));
+        _imgOrange = new TextureRegion(_parent.getAtlasGems().findRegion("gemOrange"));
         _imgOrange.flip(false, true);
 
-        _imgGreen = new TextureRegion(assetManager.get("img/gemGreen.png", Texture.class));
+        _imgGreen = new TextureRegion(_parent.getAtlasGems().findRegion("gemGreen"));
         _imgGreen.flip(false, true);
 
-        _imgYellow = new TextureRegion(assetManager.get("img/gemYellow.png", Texture.class));
+        _imgYellow = new TextureRegion(_parent.getAtlasGems().findRegion("gemYellow"));
         _imgYellow.flip(false, true);
 
-        _imgBlue = new TextureRegion(assetManager.get("img/gemBlue.png", Texture.class));
+        _imgBlue = new TextureRegion(_parent.getAtlasGems().findRegion("gemBlue"));
         _imgBlue.flip(false, true);
 
         _match1SFX = assetManager.get("audio/match1.ogg", Sound.class);
@@ -785,10 +713,10 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         }
 
         _layout.setText(_fontLCD, Integer.toString(_points));
-        _fontLCD.draw(batch, Integer.toString(_points), 648 - _layout.width, 530);
+        _fontLCD.draw(batch, Integer.toString(_points), 648 - _layout.width, 468);
 
         _layout.setText(_fontLCD, _txtTime);
-        _fontLCD.draw(batch, _txtTime, 264 - _layout.width, 530);
+        _fontLCD.draw(batch, _txtTime, 264 - _layout.width, 468);
 
         // Score table
         if (_scoreTable != null && _state == State.ShowingScoreTable) {
@@ -938,7 +866,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
                             _state = State.Wait;
                         }
                     } else if (velocityY < 0) {
-                        // "bottom 2 top ^ ^ ^ ^"
+                        // bottom 2 top ^ ^ ^ ^
                         ++_selectedSquareFirst.y;
                         if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
                             _selectedSquareFirst.x = -1;
