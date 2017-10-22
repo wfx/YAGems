@@ -44,23 +44,23 @@ public class Board {
     }
 
     public void swap(int x1, int y1, int x2, int y2) {
-//		if (x1 >= 0 && x1 < 8 &&
-//			y1 >= 0 && y1 < 8 &&
-//			x2 >= 0 && x2 < 8 &&
-//			y2 >= 0 && y2 < 8) {
+		if (x1 >= 0 && x1 < 8 &&
+			y1 >= 0 && y1 < 8 &&
+			x2 >= 0 && x2 < 8 &&
+			y2 >= 0 && y2 < 8) {
 
         Square temp = _squares[x1][y1];
         _squares[x1][y1] = _squares[x2][y2];
         _squares[x2][y2] = temp;
-//		}
+		}
     }
 
     public void del(int x, int y) {
-//		if (x >= 0 && x < 8 &&
-//			y >= 0 && y < 8) {
+		if (x >= 0 && x < 8 &&
+			y >= 0 && y < 8) {
 
         _squares[x][y].setType(Square.Type.sqEmpty);
-//		}
+		}
     }
 
     public void generate() {
