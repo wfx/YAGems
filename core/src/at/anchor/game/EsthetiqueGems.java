@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -42,6 +43,14 @@ public class EsthetiqueGems extends ApplicationAdapter {
 
     // Assets
     private AssetManager _assetManager = null;
+
+    // UI Buttons
+    private TextureAtlas _atlasUI;
+    private TextureAtlas _atlasButtons;
+
+    // Gems / Particles
+    private TextureAtlas _atlasGems;
+    private TextureAtlas _atlasParticle;
 
     // i18n
     private I18NBundle _lang = null;
@@ -82,12 +91,19 @@ public class EsthetiqueGems extends ApplicationAdapter {
         _mousePos = new Vector3();
 
         // Load general assets
-        _assetManager.load("img/pointer.png", Texture.class);
         _assetManager.load("i18n/stateLoad", I18NBundle.class);
         _assetManager.finishLoading();
 
+        // UI Buttons
+        _atlasUI = new TextureAtlas(Gdx.files.internal("img/UI.pack"));
+        _atlasButtons = new TextureAtlas(Gdx.files.internal("img/Buttons.pack"));
+
+        // Gems
+        _atlasGems = new TextureAtlas(Gdx.files.internal("img/Gems.pack"));
+        _atlasParticle = new TextureAtlas(Gdx.files.internal("img/Partc.pack"));
+
         // Get general assets
-        _imgMouse = new TextureRegion(_assetManager.get("img/pointer.png", Texture.class));
+        _imgMouse = new TextureRegion(_atlasUI.findRegion("pointer"));
         _imgMouse.flip(false, true);
 
         // Mouse hidden
@@ -143,7 +159,7 @@ public class EsthetiqueGems extends ApplicationAdapter {
 
         // calculate new viewport
         float aspectRatio = (float) arg0 / (float) arg1;
-        float scale = 1f;
+        float scale;
         Vector2 crop = new Vector2(0f, 0f);
 
         if (aspectRatio > ASPECT_RATIO) {
@@ -168,7 +184,15 @@ public class EsthetiqueGems extends ApplicationAdapter {
     @Override
     public void dispose() {
         _assetManager.dispose();
-//		_batch.dispose();
+        _atlasUI.dispose();
+        _atlasButtons.dispose();
+        _atlasGems.dispose();
+        _atlasParticle.dispose();
+        _fontP.dispose();
+        _fontH1.dispose();
+        _fontSplashLoad.dispose();
+        _fontPBold.dispose();
+		_batch.dispose();
     }
 
     @Override
@@ -193,6 +217,22 @@ public class EsthetiqueGems extends ApplicationAdapter {
 
     public AssetManager getAssetManager() {
         return _assetManager;
+    }
+
+    public TextureAtlas getAtlasUI() {
+        return _atlasUI;
+    }
+
+    public TextureAtlas getAtlasButtons() {
+        return _atlasButtons;
+    }
+
+    public TextureAtlas getAtlasGems() {
+        return _atlasGems;
+    }
+
+    public TextureAtlas getAtlasParticle() {
+        return _atlasParticle;
     }
 
     public SpriteBatch getSpriteBatch() {
