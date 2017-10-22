@@ -60,9 +60,9 @@ public class ScoreTable implements Input.TextInputListener {
 
         // Positions
         _layout.setText(_game._fontH1, _titleText);
-        _titlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 682);
+        _titlePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width) / 2, 618);
         _layout.setText(_game._fontP, _titleText);
-        _firstScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width - 162) / 2, 782);
+        _firstScorePos = new Vector2((EsthetiqueGems.VIRTUAL_WIDTH - _layout.width - 162) / 2, 718);
 
         // Check scores (new entry...)
         loadScore();
