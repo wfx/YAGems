@@ -29,6 +29,7 @@ Music by Eric Matyas www.soundimage.org<br>
 Code and new artwork by Wolfgang Morawetz<br>
 License GPLv2
 <br>
+Latest version for [Android](http://www.esthetique.at/files/esthetique.apk)<br>
 <br>
 <br>
 <br>
