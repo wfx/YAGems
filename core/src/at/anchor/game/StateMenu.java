@@ -13,8 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.I18NBundle;
 
-import java.util.Arrays;
-
 
 public class StateMenu extends State {
 
@@ -36,9 +34,7 @@ public class StateMenu extends State {
     SplashLoad _loading;
 
     //  Preferences
-    // private Preferences _prefScore;
     Preferences _prefHighScore;
-
 
     GlyphLayout _layout;
 
@@ -103,33 +99,7 @@ public class StateMenu extends State {
         AssetManager assetManager = _parent.getAssetManager();
         assetManager.load("i18n/stateMainMenu", I18NBundle.class);
         assetManager.load("img/stateMainMenuBg.png", Texture.class);
-        assetManager.load("img/gemWhite.png", Texture.class);
-        assetManager.load("img/gemRed.png", Texture.class);
-        assetManager.load("img/gemPurple.png", Texture.class);
-        assetManager.load("img/gemOrange.png", Texture.class);
-        assetManager.load("img/gemGreen.png", Texture.class);
-        assetManager.load("img/gemYellow.png", Texture.class);
-        assetManager.load("img/gemBlue.png", Texture.class);
-        assetManager.load("img/btnStart.png", Texture.class);
-        assetManager.load("img/btnStartClicked.png", Texture.class);
-        assetManager.load("img/btnExit.png", Texture.class);
-        assetManager.load("img/btnExitClicked.png", Texture.class);
-        assetManager.load("img/btnHowto.png", Texture.class);
-        assetManager.load("img/btnHowtoClicked.png", Texture.class);
-        assetManager.load("img/btnCredits.png", Texture.class);
-        assetManager.load("img/btnCreditsClicked.png", Texture.class);
         assetManager.load("audio/select.ogg", Sound.class);
-
-        // BACKUP OLD HIGSCORE!
-        /*
-        String oldScore = _prefScore.getString("oldScore", "Save Me!");
-        if (oldScore.equals("Save Me!")) {
-            String oldPlayerName = _prefScore.getString("name", ".....");
-            Integer oldPlayerScore = _prefScore.getInteger("score", 0);
-            _highScore[MAX_ENTRIES -1] = new Score(oldPlayerName, oldPlayerScore);
-            Arrays.sort(_highScore);
-        }
-        */
 
     }
 
@@ -157,21 +127,6 @@ public class StateMenu extends State {
         AssetManager assetManager = _parent.getAssetManager();
         assetManager.unload("i18n/stateMainMenu");
         assetManager.unload("img/stateMainMenuBg.png");
-        assetManager.unload("img/gemWhite.png");
-        assetManager.unload("img/gemRed.png");
-        assetManager.unload("img/gemPurple.png");
-        assetManager.unload("img/gemOrange.png");
-        assetManager.unload("img/gemGreen.png");
-        assetManager.unload("img/gemYellow.png");
-        assetManager.unload("img/gemBlue.png");
-        assetManager.unload("img/btnStart.png");
-        assetManager.unload("img/btnStartClicked.png");
-        assetManager.unload("img/btnExit.png");
-        assetManager.unload("img/btnExitClicked.png");
-        assetManager.unload("img/btnHowto.png");
-        assetManager.unload("img/btnHowtoClicked.png");
-        assetManager.unload("img/btnCredits.png");
-        assetManager.unload("img/btnCreditsClicked.png");
         assetManager.unload("audio/select.ogg");
 
     }
@@ -179,44 +134,28 @@ public class StateMenu extends State {
     @Override
     public void assignResources() {
 
+
         AssetManager assetManager = _parent.getAssetManager();
 
         _lang = assetManager.get("i18n/stateMainMenu", I18NBundle.class);
 
-        // Button Play
-        TextureRegion btnPlay = new TextureRegion(assetManager.get("img/btnStart.png", Texture.class));
-        TextureRegion btnPlayClicked = new TextureRegion(assetManager.get("img/btnStartClicked.png", Texture.class));
-        btnPlay.flip(false,true);
-        btnPlayClicked.flip(false,true);
         _playButton = new Button(_parent, 156, 794);
-        _playButton.setNormal(btnPlay, btnPlayClicked);
+        _playButton.setNormal(_parent.getAtlasButtons().findRegion("btnStart"), _parent.getAtlasButtons().findRegion("btnStartClicked"));
         _playButton.setFont(_parent._fontH1);
         _playButton.setText(_lang.get("Menu_StartGame"));
         _playButton.setTextPos(156 + 74 + 66, 814 );
 
         // Button EXIT
-        TextureRegion btnExit = new TextureRegion(assetManager.get("img/btnExit.png", Texture.class));
-        TextureRegion btnExitClicked = new TextureRegion(assetManager.get("img/btnExitClicked.png", Texture.class));
-        btnExit.flip(false,true);
-        btnExitClicked.flip(false,true);
         _quitButton = new Button(_parent, 156, 894);
-        _quitButton.setNormal(btnExit, btnExitClicked);
+        _quitButton.setNormal(_parent.getAtlasButtons().findRegion("btnExit"), _parent.getAtlasButtons().findRegion("btnExitClicked"));
 
         // Button How to
-        TextureRegion btnHowto = new TextureRegion(assetManager.get("img/btnHowto.png", Texture.class));
-        TextureRegion btnHowtoClicked = new TextureRegion(assetManager.get("img/btnHowtoClicked.png", Texture.class));
-        btnHowto.flip(false,true);
-        btnHowtoClicked.flip(false,true);
         _howtoButton = new Button(_parent, 322, 894);
-        _howtoButton.setNormal(btnHowto, btnHowtoClicked);
+        _howtoButton.setNormal(_parent.getAtlasButtons().findRegion("btnHowto"), _parent.getAtlasButtons().findRegion("btnHowtoClicked"));
 
         // Button Credits
-        TextureRegion btnCredits = new TextureRegion(assetManager.get("img/btnCredits.png", Texture.class));
-        TextureRegion btnCreditsClicked = new TextureRegion(assetManager.get("img/btnCreditsClicked.png", Texture.class));
-        btnCredits.flip(false,true);
-        btnCreditsClicked.flip(false,true);
         _creditsButton = new Button(_parent, 496, 894);
-        _creditsButton.setNormal(btnCredits, btnCreditsClicked);
+        _creditsButton.setNormal(_parent.getAtlasButtons().findRegion("btnCredits"), _parent.getAtlasButtons().findRegion("btnCreditsClicked"));
 
         _imgBackground = new TextureRegion(assetManager.get("img/stateMainMenuBg.png", Texture.class));
         _imgBackground.flip(false, true);
