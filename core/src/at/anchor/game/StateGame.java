@@ -848,12 +848,14 @@ public class StateGame extends State implements GestureDetector.GestureListener 
                             _selectedSquareFirst.y = -1;
                             _state = State.Wait;
                         }
-                    } else if (velocityX < 0) {
-                        // left 2 right > > > >
-                        if (!checkClickedSquare(_selectedSquareFirst.x + 1, _selectedSquareFirst.y)) {
-                            _selectedSquareFirst.x = -1;
-                            _selectedSquareFirst.y = -1;
-                            _state = State.Wait;
+                    } else {
+                        if (velocityX < 0) {
+                            // left 2 right > > > >
+                            if (!checkClickedSquare(_selectedSquareFirst.x + 1, _selectedSquareFirst.y)) {
+                                _selectedSquareFirst.x = -1;
+                                _selectedSquareFirst.y = -1;
+                                _state = State.Wait;
+                            }
                         }
                     }
                 } else {
@@ -865,13 +867,15 @@ public class StateGame extends State implements GestureDetector.GestureListener 
                             _selectedSquareFirst.y = -1;
                             _state = State.Wait;
                         }
-                    } else if (velocityY < 0) {
-                        // bottom 2 top ^ ^ ^ ^
-                        ++_selectedSquareFirst.y;
-                        if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
-                            _selectedSquareFirst.x = -1;
-                            _selectedSquareFirst.y = -1;
-                            _state = State.Wait;
+                    } else {
+                        if (velocityY < 0) {
+                            // bottom 2 top ^ ^ ^ ^
+                            ++_selectedSquareFirst.y;
+                            if (!checkClickedSquare(_selectedSquareFirst.x, _selectedSquareFirst.y - 1)) {
+                                _selectedSquareFirst.x = -1;
+                                _selectedSquareFirst.y = -1;
+                                _state = State.Wait;
+                            }
                         }
                     }
                 }
