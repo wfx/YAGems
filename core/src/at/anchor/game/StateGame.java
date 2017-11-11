@@ -252,19 +252,17 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         // Button EXIT
         _exitButton = new Button(_parent, 56, 330);
         _exitButton.setNormal(_parent.getAtlasButtons().findRegion("btnExit"), _parent.getAtlasButtons().findRegion("btnExitClicked"));
-
         // Button Reset/Restart
-        _resetButton = new Button(_parent, 186, 330);
+        _resetButton = new Button(_parent, 196, 330);
         _resetButton.setNormal(_parent.getAtlasButtons().findRegion("btnRestart"), _parent.getAtlasButtons().findRegion("btnRestartClicked"));
-
         // Button Music On/Off
-        _musicButton = new Button(_parent, 316, 330);
+        _musicButton = new Button(_parent, 296, 330);
         _musicButton.setNormal(_parent.getAtlasButtons().findRegion("btnMusicOff"), _parent.getAtlasButtons().findRegion("btnMusicOffClicked"));
         _musicButton.setSwitch(_parent.getAtlasButtons().findRegion("btnMusicOn"), _parent.getAtlasButtons().findRegion("btnMusicOnClicked"));
         _musicButton.setModeOn(false);
 
         // Button Hint
-        _hintButton = new Button(_parent, 576, 330);
+        _hintButton = new Button(_parent, 580, 330);
         _hintButton.setNormal(_parent.getAtlasButtons().findRegion("btnHint"), _parent.getAtlasButtons().findRegion("btnHintClicked"));
 
         _imgBackground = new TextureRegion(assetManager.get("img/stateGameBg.png", Texture.class));

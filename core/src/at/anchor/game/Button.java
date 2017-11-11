@@ -101,9 +101,7 @@ public class Button {
 
     public void setNormal(TextureRegion btn, TextureRegion btnClicked) {
         _imgNormal = btn;
-        _imgNormal.flip(false, true);
         _imgNormalClicked = btnClicked;
-        _imgNormalClicked.flip(false, true);
 
         if (btn != null && btnClicked != null) {
             // Total width and height: pos x + width...
@@ -114,9 +112,7 @@ public class Button {
 
     public void setSwitch(TextureRegion btn, TextureRegion btnClicked) {
         _imgSwitch = btn;
-        _imgSwitch.flip(false, true);
         _imgSwitchClicked = btnClicked;
-        _imgSwitchClicked.flip(false, true);
     }
 
     public void setFont(BitmapFont font) {
