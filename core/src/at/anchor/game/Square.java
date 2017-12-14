@@ -8,7 +8,7 @@ public class Square  {
         sqOrange,
         sqGreen,
         sqYellow,
-        sqBlue};
+        sqBlue}
 
     public int origY;
     public int destY;

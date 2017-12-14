@@ -12,7 +12,7 @@ public class Animation {
         EaseOutQuart,
         EaseInOutQuart,
         EaseOutBack,
-        Linear};
+        Linear}
 
     public static float easeLinear(double t, float b, float c, double d) {
         return (float)(c * t / d + b);

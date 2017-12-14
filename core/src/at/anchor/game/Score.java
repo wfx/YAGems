@@ -35,7 +35,7 @@ public class Score implements Comparable<Score> {
     }
 
     public int compareTo(Score cmpScore){
-        int score = ((Score) cmpScore).getScore();
+        int score = cmpScore.getScore();
         if (getScore()< score) {
             return 1;
         } else if (getScore()>score) {

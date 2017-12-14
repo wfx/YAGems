@@ -29,6 +29,7 @@ public class StateGame extends State implements GestureDetector.GestureListener 
         Wait,
         SelectedGem,
         ChangingGems,
+        WrongMove,
         DisappearingGems,
         FallingGems,
         DisappearingBoard,
@@ -654,6 +655,11 @@ public class StateGame extends State implements GestureDetector.GestureListener 
                                     _animTotalTime);
                         }
 
+                        else if (_state == State.WrongMove) {
+                            _state = State.Wait;
+                            System.out.println("WRONG MOVE");
+                        }
+
                         // When two gems are switching
                         else if (_state == State.ChangingGems) {
                             if (i == _selectedSquareFirst.x && j == _selectedSquareFirst.y) {
@@ -1023,8 +1029,9 @@ public class StateGame extends State implements GestureDetector.GestureListener 
                         _selectedSquareSecond.x, _selectedSquareSecond.y);
 
                 return true;
+            } else {
+                _state = State.WrongMove;
             }
-
             _board.swap(_selectedSquareFirst.x, _selectedSquareFirst.y,
                     _selectedSquareSecond.x, _selectedSquareSecond.y);
         }

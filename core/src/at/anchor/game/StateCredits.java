@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 public class StateCredits extends State {
 
-    private enum State {Loading, Active};
+    private enum State {Loading, Active}
 
     // State
     private State _state;

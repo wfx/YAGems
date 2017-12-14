@@ -74,7 +74,7 @@ public class Board {
                 for (int j = 0; j < 8; ++j) {
                     _squares[i][j] = new Square(Square.numToType(MathUtils.random(1, 7)));
                     _squares[i][j].mustFall = true;
-                    _squares[i][j].origY = (int)MathUtils.random(-7, -1);
+                    _squares[i][j].origY = MathUtils.random(-7, -1);
                     _squares[i][j].destY = j - _squares[i][j].origY;
 
                 }

@@ -208,11 +208,8 @@ public class EsthetiqueGems extends ApplicationAdapter {
         // Fetch new state and, therefore, schedule safe change
         _nextState = _states.get(stateName);
 
-        if (_nextState != null) {
-            return true;
-        }
+        return _nextState != null;
 
-        return false;
     }
 
     public AssetManager getAssetManager() {

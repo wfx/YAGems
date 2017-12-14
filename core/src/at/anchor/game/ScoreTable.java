@@ -16,8 +16,6 @@ public class ScoreTable implements Input.TextInputListener {
 
     public enum State {RequestPlayerName, ShowScores}
 
-    ;
-
     // State, game and points
     private State _state;
     private EsthetiqueGems _game;
