@@ -1,7 +1,7 @@
 # Yet Another Gems
 ### A match 3 Game
 
-Primary target system is Android but it will also runs on all java suported Desktop.<br>
+Primary target system is Android.<br>
 It is ads free and there is also none tracking or other data colecting system inside.<br>
 <br>
 Just the game :)<br>
