@@ -1,0 +1,145 @@
+
+Buttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+btnStartClicked
+  rotate: false
+  xy: 1, 165
+  size: 420, 80
+  orig: 420, 80
+  offset: 0, 0
+  index: -1
+btnStart
+  rotate: false
+  xy: 1, 83
+  size: 420, 80
+  orig: 420, 80
+  offset: 0, 0
+  index: -1
+btnHowto
+  rotate: false
+  xy: 423, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnHintClicked
+  rotate: false
+  xy: 1, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnRestartClicked
+  rotate: false
+  xy: 423, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnHint
+  rotate: false
+  xy: 505, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnBg
+  rotate: false
+  xy: 83, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnCreditsClicked
+  rotate: false
+  xy: 505, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnPauseClicked
+  rotate: false
+  xy: 587, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnRestart
+  rotate: false
+  xy: 165, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnMusicOffClicked
+  rotate: false
+  xy: 587, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnClickedBg
+  rotate: false
+  xy: 669, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnMusicOff
+  rotate: false
+  xy: 247, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnHowtoClicked
+  rotate: false
+  xy: 669, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnExit
+  rotate: false
+  xy: 751, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnPause
+  rotate: false
+  xy: 329, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnExitClicked
+  rotate: false
+  xy: 751, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnMusicOnClicked
+  rotate: false
+  xy: 833, 165
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnCredits
+  rotate: false
+  xy: 411, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+btnMusicOn
+  rotate: false
+  xy: 833, 83
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1

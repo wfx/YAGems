@@ -1,0 +1,54 @@
+
+Gems.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+gemYellow
+  rotate: false
+  xy: 1, 153
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemBlue
+  rotate: false
+  xy: 1, 77
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemRed
+  rotate: false
+  xy: 77, 153
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemPurple
+  rotate: false
+  xy: 1, 1
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemOrange
+  rotate: false
+  xy: 77, 77
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemGreen
+  rotate: false
+  xy: 153, 153
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
+gemWhite
+  rotate: false
+  xy: 77, 1
+  size: 74, 74
+  orig: 74, 74
+  offset: 0, 0
+  index: -1
